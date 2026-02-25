@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件演示 - GoldPulse</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #ffd700;
+            font-size: 1.5rem;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .demo-controls button {
+            padding: 10px 20px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .demo-controls button:hover {
+            background: #333;
+        }
+        
+        .code-block {
+            background: #0a0a0a;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #00ff64;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 style="text-align: center; color: #ffd700; margin-bottom: 40px;">🧩 GoldPulse 组件演示</h1>
+        
+        <!-- 导航栏演示 -->
+        <div class="demo-section">
+            <h2>📍 导航栏组件 (gp-navbar)</h2>
+            <gp-navbar current-page="markets"></gp-navbar>
+            <div class="code-block">
+                <code>&lt;gp-navbar current-page="markets"&gt;&lt;/gp-navbar&gt;</code>
+            </div>
+        </div>
+        
+        <!-- 价格卡片演示 -->
+        <div class="demo-section">
+            <h2>💳 价格卡片组件 (gp-price-card)</h2>
+            <div class="demo-grid">
+                <gp-price-card 
+                    symbol="XAU" 
+                    name="黄金" 
+                    currency="USD" 
+                    price="2650.50" 
+                    change="12.30" 
+                    change-percent="0.47" 
+                    icon="🥇">
+                </gp-price-card>
+                
+                <gp-price-card 
+                    symbol="HSI" 
+                    name="恒生指数" 
+                    currency="HKD" 
+                    price="19850.25" 
+                    change="-125.50" 
+                    change-percent="-0.63" 
+                    icon="🇭🇰">
+                </gp-price-card>
+            </div>
+            <div class="demo-controls">
+                <button onclick="updateCard1()">更新黄金数据</button>
+                <button onclick="updateCard2()">更新恒指数据</button>
+            </div>
+            <div class="code-block">
+                <code>
+&lt;gp-price-card 
+    symbol="XAU" 
+    name="黄金" 
+    currency="USD" 
+    price="2650.50" 
+    change="12.30" 
+    change-percent="0.47" 
+    icon="🥇"&gt;
+&lt;/gp-price-card&gt;
+                </code>
+            </div>
+        </div>
+        
+        <!-- 加载状态演示 -->
+        <div class="demo-section">
+            <h2>⏳ 加载状态组件 (gp-loading)</h2>
+            <div class="demo-controls">
+                <button onclick="showLoading()">显示加载</button>
+                <button onclick="hideLoading()">隐藏加载</button>
+            </div>
+            <gp-loading id="demoLoading" text="正在获取数据..."></gp-loading>
+            <div class="code-block">
+                <code>
+// HTML
+&lt;gp-loading id="loading" text="正在获取数据..."&gt;&lt;/gp-loading&gt;
+
+// JavaScript
+document.getElementById('loading').show();
+document.getElementById('loading').hide();
+                </code>
+            </div>
+        </div>
+        
+        <!-- 错误提示演示 -->
+        <div class="demo-section">
+            <h2>⚠️ 错误提示组件 (gp-error)</h2>
+            <div class="demo-controls">
+                <button onclick="showError()">显示错误</button>
+                <button onclick="hideError()">隐藏错误</button>
+            </div>
+            <gp-error id="demoError"></gp-error>
+            <div class="code-block">
+                <code>
+// HTML
+&lt;gp-error id="error"&gt;&lt;/gp-error&gt;
+
+// JavaScript
+document.getElementById('error').show('网络连接失败，请重试');
+document.getElementById('error').hide();
+
+// 监听重试事件
+document.getElementById('error').addEventListener('retry', () => {
+    // 重新加载数据
+});
+                </code>
+            </div>
+        </div>
+        
+        <!-- 倒计时演示 -->
+        <div class="demo-section">
+            <h2>⏱️ 倒计时组件 (gp-countdown)</h2>
+            <p style="color: #888;">下次刷新：<gp-countdown id="demoCountdown" seconds="300" running></gp-countdown></p>
+            <div class="demo-controls">
+                <button onclick="startCountdown()">开始</button>
+                <button onclick="stopCountdown()">暂停</button>
+                <button onclick="resetCountdown()">重置</button>
+            </div>
+            <div class="code-block">
+                <code>
+// HTML
+&lt;gp-countdown seconds="300" running&gt;&lt;/gp-countdown&gt;
+
+// JavaScript
+const countdown = document.getElementById('countdown');
+countdown.start();
+countdown.stop();
+countdown.reset(300);
+
+// 监听倒计时结束
+countdown.addEventListener('countdownEnd', () => {
+    // 刷新数据
+});
+                </code>
+            </div>
+        </div>
+        
+        <!-- 迷你图表演示 -->
+        <div class="demo-section">
+            <h2>📈 迷你图表组件 (gp-sparkline)</h2>
+            <div style="width: 300px; background: #1e1e1e; padding: 20px; border-radius: 12px;">
+                <gp-sparkline id="demoSparkline" height="80" color="#ffd700"></gp-sparkline>
+            </div>
+            <div class="demo-controls">
+                <button onclick="updateSparkline()">更新数据</button>
+            </div>
+            <div class="code-block">
+                <code>
+// HTML
+&lt;gp-sparkline id="sparkline" height="60" color="#ffd700"&gt;&lt;/gp-sparkline&gt;
+
+// JavaScript
+const sparkline = document.getElementById('sparkline');
+sparkline.setData([2600, 2620, 2610, 2640, 2630, 2650, 2645, 2652]);
+                </code>
+            </div>
+        </div>
+        
+        <!-- Store 演示 -->
+        <div class="demo-section">
+            <h2>🗄️ 状态管理 (Store)</h2>
+            <div class="demo-controls">
+                <button onclick="addFavorite()">添加收藏</button>
+                <button onclick="removeFavorite()">移除收藏</button>
+                <button onclick="toggleAutoRefresh()">切换自动刷新</button>
+                <button onclick="showStoreState()">查看状态</button>
+            </div>
+            <div id="storeOutput" class="code-block" style="margin-top: 20px;">
+                <code>点击按钮查看状态...</code>
+            </div>
+        </div>
+        
+        <!-- API 演示 -->
+        <div class="demo-section">
+            <h2>🌐 API 服务 (APIService)</h2>
+            <div class="demo-controls">
+                <button onclick="fetchGoldPrice()">获取黄金价格</button>
+                <button onclick="fetchMarketData()">获取股票数据</button>
+                <button onclick="checkHealth()">健康检查</button>
+                <button onclick="clearCache()">清除缓存</button>
+            </div>
+            <div id="apiOutput" class="code-block" style="margin-top: 20px;">
+                <code>点击按钮调用 API...</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入模块化脚本 -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/store.js"></script>
+    <script src="../js/services/api.js"></script>
+    <script src="../js/components.js"></script>
+    
+    <script>
+        // 价格卡片更新
+        function updateCard1() {
+            const card = document.querySelector('gp-price-card');
+            const newPrice = 2600 + Math.random() * 100;
+            const newChange = (Math.random() - 0.5) * 30;
+            const newChangePercent = (newChange / newPrice) * 100;
+            
+            card.setAttribute('price', newPrice.toFixed(2));
+            card.setAttribute('change', newChange.toFixed(2));
+            card.setAttribute('change-percent', newChangePercent.toFixed(2));
+        }
+        
+        function updateCard2() {
+            const cards = document.querySelectorAll('gp-price-card');
+            const card = cards[1];
+            const newPrice = 19500 + Math.random() * 1000;
+            const newChange = (Math.random() - 0.5) * 500;
+            const newChangePercent = (newChange / newPrice) * 100;
+            
+            card.setAttribute('price', newPrice.toFixed(2));
+            card.setAttribute('change', newChange.toFixed(2));
+            card.setAttribute('change-percent', newChangePercent.toFixed(2));
+        }
+        
+        // 加载状态控制
+        function showLoading() {
+            document.getElementById('demoLoading').show();
+        }
+        
+        function hideLoading() {
+            document.getElementById('demoLoading').hide();
+        }
+        
+        // 错误提示控制
+        function showError() {
+            document.getElementById('demoError').show('网络连接失败，请检查网络设置后重试');
+        }
+        
+        function hideError() {
+            document.getElementById('demoError').hide();
+        }
+        
+        // 倒计时控制
+        function startCountdown() {
+            document.getElementById('demoCountdown').setAttribute('running', '');
+        }
+        
+        function stopCountdown() {
+            document.getElementById('demoCountdown').removeAttribute('running');
+        }
+        
+        function resetCountdown() {
+            document.getElementById('demoCountdown').reset(300);
+        }
+        
+        // 迷你图表更新
+        function updateSparkline() {
+            const sparkline = document.getElementById('demoSparkline');
+            const data = [];
+            let base = 2600;
+            for (let i = 0; i < 20; i++) {
+                base += (Math.random() - 0.5) * 50;
+                data.push(base);
+            }
+            sparkline.setData(data);
+        }
+        
+        // 初始化图表
+        setTimeout(updateSparkline, 100);
+        
+        // Store 操作
+        function addFavorite() {
+            Store.addFavorite('XAU', '黄金');
+            Store.addFavorite('HSI', '恒生指数');
+            showStoreState();
+        }
+        
+        function removeFavorite() {
+            Store.removeFavorite('XAU');
+            showStoreState();
+        }
+        
+        function toggleAutoRefresh() {
+            const newState = Store.toggleAutoRefresh();
+            console.log('Auto refresh:', newState);
+        }
+        
+        function showStoreState() {
+            const output = document.getElementById('storeOutput');
+            const state = {
+                favorites: Store.get('favorites'),
+                autoRefresh: Store.get('autoRefresh'),
+                currentMarket: Store.get('currentMarket'),
+                alerts: Store.get('alerts')
+            };
+            output.innerHTML = '<code>' + JSON.stringify(state, null, 2) + '</code>';
+        }
+        
+        // API 操作
+        async function fetchGoldPrice() {
+            const output = document.getElementById('apiOutput');
+            output.innerHTML = '<code>加载中...</code>';
+            try {
+                const data = await APIService.getGoldPrice();
+                output.innerHTML = '<code>' + JSON.stringify(data, null, 2).substring(0, 500) + '...</code>';
+            } catch (e) {
+                output.innerHTML = '<code style="color: #ff6666;">错误: ' + e.message + '</code>';
+            }
+        }
+        
+        async function fetchMarketData() {
+            const output = document.getElementById('apiOutput');
+            output.innerHTML = '<code>加载中...</code>';
+            try {
+                const data = await APIService.getMarketData('hsi');
+                output.innerHTML = '<code>' + JSON.stringify(data, null, 2) + '</code>';
+            } catch (e) {
+                output.innerHTML = '<code style="color: #ff6666;">错误: ' + e.message + '</code>';
+            }
+        }
+        
+        async function checkHealth() {
+            const output = document.getElementById('apiOutput');
+            output.innerHTML = '<code>检查中...</code>';
+            try {
+                const health = await APIService.healthCheck();
+                output.innerHTML = '<code>' + JSON.stringify(health, null, 2) + '</code>';
+            } catch (e) {
+                output.innerHTML = '<code style="color: #ff6666;">错误: ' + e.message + '</code>';
+            }
+        }
+        
+        function clearCache() {
+            APIService.clearCache();
+            document.getElementById('apiOutput').innerHTML = '<code>缓存已清除</code>';
+        }
+        
+        // 监听收藏变化
+        Store.subscribe('favorites', (newVal) => {
+            console.log('Favorites changed:', newVal);
+        });
+    </script>
+</body>
+</html>

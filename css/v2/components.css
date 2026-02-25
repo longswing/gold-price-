@@ -1,0 +1,607 @@
+/* ============================================
+   GoldPulse Components v2.0
+   下一代组件样式
+   ============================================ */
+
+@import 'variables.css';
+
+/* ============================================
+   1. 按钮组件
+   ============================================ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 14px 28px;
+    font-family: var(--font-text);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all var(--duration-normal) var(--ease-spring);
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* 主要按钮 - 金色渐变 */
+.btn-primary {
+    background: var(--gradient-gold);
+    color: #000;
+    box-shadow: 0 4px 16px var(--gold-20);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--gold-30), var(--glow-gold-sm);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* 次要按钮 - 玻璃效果 */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 幽灵按钮 */
+.btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* 发光按钮 - 紫色渐变 */
+.btn-glow {
+    position: relative;
+    background: var(--gradient-purple-blue);
+    color: #fff;
+    z-index: 1;
+}
+
+.btn-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: var(--gradient-aurora);
+    border-radius: calc(var(--radius-md) + 2px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--duration-normal);
+    filter: blur(8px);
+}
+
+.btn-glow:hover::before {
+    opacity: 0.8;
+}
+
+.btn-glow:hover {
+    transform: translateY(-2px);
+}
+
+/* 按钮尺寸 */
+.btn-sm {
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+    padding: 18px 36px;
+    font-size: 16px;
+}
+
+.btn-xl {
+    padding: 22px 44px;
+    font-size: 18px;
+    border-radius: var(--radius-lg);
+}
+
+/* 按钮图标 */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--radius-md);
+}
+
+.btn-icon.btn-sm {
+    width: 32px;
+    height: 32px;
+}
+
+.btn-icon.btn-lg {
+    width: 48px;
+    height: 48px;
+}
+
+/* ============================================
+   2. 卡片组件
+   ============================================ */
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: all var(--duration-slow) var(--ease-spring);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-gold);
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* 玻璃卡片 */
+.card-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 悬浮追踪卡片 */
+.card-spotlight {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-spotlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 215, 0, 0.06),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity var(--duration-normal);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.card-spotlight:hover::before {
+    opacity: 1;
+}
+
+.card-spotlight:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 215, 0, 0.2);
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* 渐变边框卡片 */
+.card-gradient-border {
+    position: relative;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    padding: 1px;
+}
+
+.card-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+    padding: 1px;
+    background: var(--gradient-gold);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* 卡片内容 */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.card-title {
+    font: var(--text-h5);
+    color: var(--text-primary);
+}
+
+.card-body {
+    color: var(--text-secondary);
+}
+
+.card-footer {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-light);
+}
+
+/* ============================================
+   3. 输入框组件
+   ============================================ */
+
+.input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    font-size: 16px;
+    transition: all var(--duration-normal);
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--gold-30);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px var(--gold-10);
+}
+
+.input::placeholder {
+    color: var(--text-muted);
+}
+
+/* 输入框组 */
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group .input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* ============================================
+   4. 导航组件
+   ============================================ */
+
+.navbar-v2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: var(--z-nav);
+    transition: all var(--duration-normal);
+}
+
+.navbar-v2.scrolled {
+    background: rgba(10, 10, 15, 0.95);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-container {
+    max-width: var(--container-xl);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font: var(--text-h5);
+    color: var(--gold-primary);
+    text-decoration: none;
+    transition: opacity var(--duration-fast);
+}
+
+.nav-logo:hover {
+    opacity: 0.8;
+}
+
+.nav-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-gold);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--glow-gold-sm);
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.nav-link {
+    padding: var(--space-2) var(--space-4);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-fast);
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    color: var(--gold-primary);
+    background: var(--gold-10);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* ============================================
+   5. 徽章与标签
+   ============================================ */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+.badge-gold {
+    background: var(--gold-10);
+    color: var(--gold-primary);
+    border: 1px solid var(--gold-20);
+}
+
+.badge-purple {
+    background: var(--accent-purple-10);
+    color: var(--accent-purple);
+    border: 1px solid var(--accent-purple-20);
+}
+
+.badge-live {
+    background: rgba(50, 215, 75, 0.1);
+    color: var(--up);
+    border: 1px solid rgba(50, 215, 75, 0.2);
+}
+
+.badge-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--up);
+    border-radius: 50%;
+    animation: livePulse 2s infinite;
+}
+
+/* ============================================
+   6. 价格显示组件
+   ============================================ */
+
+.price-display {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.price-label {
+    font: var(--text-caption);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-value {
+    font: var(--text-mono);
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.price-value.gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.price-change {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 14px;
+    font-weight: 600;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+}
+
+.price-change.up {
+    color: var(--up);
+    background: var(--up-10);
+}
+
+.price-change.down {
+    color: var(--down);
+    background: var(--down-10);
+}
+
+/* ============================================
+   7. 玻璃拟态工具类
+   ============================================ */
+
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   8. 渐变文字工具类
+   ============================================ */
+
+.text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-purple {
+    background: linear-gradient(135deg, var(--accent-purple-light), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-aurora {
+    background: var(--gradient-aurora);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   9. 发光效果工具类
+   ============================================ */
+
+.glow-gold {
+    box-shadow: var(--glow-gold);
+}
+
+.glow-purple {
+    box-shadow: var(--glow-purple);
+}
+
+.glow-up {
+    box-shadow: 0 0 20px var(--up-glow);
+}
+
+.glow-down {
+    box-shadow: 0 0 20px var(--down-glow);
+}
+
+.text-glow-gold {
+    text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+}
+
+.text-glow-purple {
+    text-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+}
+
+/* ============================================
+   10. Section样式
+   ============================================ */
+
+.section {
+    padding: var(--space-24) 0;
+    position: relative;
+}
+
+.section-lg {
+    padding: var(--space-32) 0;
+}
+
+.section-xl {
+    padding: var(--space-40) 0;
+}
+
+.section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--space-16);
+}
+
+.section-title {
+    font: var(--text-h2);
+    margin-bottom: var(--space-4);
+}
+
+.section-subtitle {
+    font: var(--text-body-lg);
+    color: var(--text-tertiary);
+}
+
+.container {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* ============================================
+   响应式调整
+   ============================================ */
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .navbar-v2 {
+        height: var(--nav-height-mobile);
+    }
+    
+    .container {
+        padding: 0 var(--space-4);
+    }
+    
+    .card {
+        padding: var(--space-5);
+    }
+}
+
+/* 动画关键帧定义 */
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}

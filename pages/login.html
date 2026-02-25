@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<!-- GoldPulse v2.0 Updated -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - GoldPulse v2.0</title>
+    
+    <!-- v2 CSS System -->
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           Auth Page v2 - 左右分屏
+           ============================================ */
+        .auth-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 480px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* ============================================
+           Left Side - Brand Showcase
+           ============================================ */
+        .auth-brand {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-10);
+            background: var(--gradient-bg-hero);
+            overflow: hidden;
+        }
+        
+        .auth-brand-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/v2/cybersecurity-dark.jpg') center/cover no-repeat;
+            opacity: 0.4;
+        }
+        
+        .auth-brand-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 50%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(139,92,246,0.08) 0%, transparent 40%),
+                linear-gradient(135deg, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.7) 100%);
+        }
+        
+        .auth-brand-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 480px;
+        }
+        
+        .auth-brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-10);
+        }
+        
+        .auth-brand-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: var(--glow-gold);
+        }
+        
+        .auth-brand-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .auth-brand-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-6);
+            line-height: 1.2;
+        }
+        
+        .auth-brand-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .auth-brand-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-tertiary);
+            line-height: 1.7;
+            margin-bottom: var(--space-10);
+        }
+        
+        .auth-brand-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+        }
+        
+        .auth-brand-stat {
+            text-align: center;
+        }
+        
+        .auth-brand-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            margin-bottom: var(--space-2);
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.3));
+        }
+        
+        .auth-brand-stat-label {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+        
+        /* ============================================
+           Right Side - Glass Form
+           ============================================ */
+        .auth-form-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-10);
+            background: rgba(10,10,15,0.5);
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+        
+        .auth-form-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-left: 1px solid transparent;
+            background: linear-gradient(180deg, rgba(255,215,0,0.1), transparent 30%, transparent 70%, rgba(255,215,0,0.05)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 360px;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+        
+        .auth-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .auth-header p {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+        
+        /* Glass Card */
+        .auth-card {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent, rgba(255,215,0,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            gap: var(--space-2);
+            margin-bottom: var(--space-6);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: var(--space-4);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: var(--space-3);
+            background: transparent;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all 0.3s var(--ease-spring);
+        }
+        
+        .auth-tab:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .auth-tab.active {
+            color: var(--gold-primary);
+            background: var(--gold-10);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        /* Form Groups */
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-2);
+            color: var(--text-secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--space-4) var(--space-4);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--gold-30);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 0 4px var(--gold-10), var(--glow-gold-sm);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+            font-size: 0.875rem;
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .form-checkbox input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--gold-primary);
+            cursor: pointer;
+        }
+        
+        .form-link {
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .form-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #000;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+        
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+            color: var(--text-quaternary);
+            font-size: 0.875rem;
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* Social Login - 发光边框 */
+        .social-login {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        .btn-social {
+            flex: 1;
+            padding: var(--space-3);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+        }
+        
+        .btn-social:hover {
+            border-color: var(--gold-30);
+            background: var(--gold-10);
+            color: var(--gold-primary);
+            box-shadow: var(--glow-gold-sm);
+            transform: translateY(-2px);
+        }
+        
+        /* Messages */
+        .error-message {
+            background: var(--down-10);
+            border: 1px solid rgba(255,69,58,0.2);
+            color: var(--down);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-4);
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .success-message {
+            background: var(--up-10);
+            border: 1px solid rgba(50,215,75,0.2);
+            color: var(--up);
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-4);
+            font-size: 0.875rem;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        /* User Info */
+        .user-info {
+            display: none;
+            text-align: center;
+            padding: var(--space-8);
+        }
+        
+        .user-info.show {
+            display: block;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto var(--space-5);
+            box-shadow: var(--glow-gold);
+        }
+        
+        .user-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .user-email {
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            margin-bottom: var(--space-6);
+        }
+        
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: var(--space-6);
+            color: var(--text-quaternary);
+            font-size: 0.75rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .auth-page {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-brand {
+                display: none;
+            }
+            
+            .auth-form-section {
+                padding: var(--space-6);
+            }
+            
+            .auth-form-section::before {
+                border-left: none;
+                border-top: 1px solid transparent;
+                background: linear-gradient(90deg, rgba(255,215,0,0.1), transparent 30%, transparent 70%, rgba(255,215,0,0.05)) border-box;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: var(--space-6);
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page">
+        <!-- Left Side - Brand Showcase -->
+        <div class="auth-brand">
+            <div class="auth-brand-bg"></div>
+            <div class="auth-brand-overlay"></div>
+            
+            <div class="auth-brand-content">
+                <div class="auth-brand-logo">
+                    <div class="auth-brand-icon">🥇</div>
+                    <div class="auth-brand-name">GoldPulse</div>
+                </div>
+                
+                <h1 class="auth-brand-title">
+                    掌握<span>黄金脉搏</span><br>
+                    投资更有底气
+                </h1>
+                
+                <p class="auth-brand-subtitle">
+                    专业的贵金属投资数据平台，实时追踪全球黄金价格走势，
+                    专业分析工具助您做出明智投资决策。
+                </p>
+                
+                <div class="auth-brand-stats">
+                    <div class="auth-brand-stat">
+                        <div class="auth-brand-stat-value">50K+</div>
+                        <div class="auth-brand-stat-label">活跃用户</div>
+                    </div>
+                    <div class="auth-brand-stat">
+                        <div class="auth-brand-stat-value">99.9%</div>
+                        <div class="auth-brand-stat-label">数据准确率</div>
+                    </div>
+                    <div class="auth-brand-stat">
+                        <div class="auth-brand-stat-value">24/7</div>
+                        <div class="auth-brand-stat-label">实时监控</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Glass Form -->
+        <div class="auth-form-section">
+            <div class="auth-container">
+                <!-- Header -->
+                <div class="auth-header">
+                    <h1>欢迎回来</h1>
+                    <p>登录您的账户以继续</p>
+                </div>
+                
+                <!-- Auth Card -->
+                <div class="auth-card" id="authCard">
+                    <!-- Tabs -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" onclick="switchTab('login')">登录</button>
+                        <button class="auth-tab" onclick="switchTab('register')">注册</button>
+                    </div>
+                    
+                    <!-- Error/Success Messages -->
+                    <div class="error-message" id="errorMessage"></div>
+                    <div class="success-message" id="successMessage"></div>
+                    
+                    <!-- Login Form -->
+                    <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">邮箱</label>
+                            <input type="email" class="form-input" id="loginEmail" placeholder="请输入邮箱" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="form-checkbox">
+                                <input type="checkbox" id="rememberMe">
+                                <span>记住我</span>
+                            </label>
+                            <a href="#" class="form-link" onclick="forgotPassword()">忘记密码？</a>
+                        </div>
+                        <button type="submit" class="btn-submit">登录</button>
+                    </form>
+                    
+                    <!-- Register Form -->
+                    <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label class="form-label">用户名</label>
+                            <input type="text" class="form-input" id="registerName" placeholder="请输入用户名" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">邮箱</label>
+                            <input type="email" class="form-input" id="registerEmail" placeholder="请输入邮箱" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-input" id="registerPassword" placeholder="请输入密码（至少6位）" minlength="6" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">确认密码</label>
+                            <input type="password" class="form-input" id="registerConfirmPassword" placeholder="请再次输入密码" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="form-checkbox">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span>我同意 <a href="#" class="form-link">服务条款</a></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit">注册</button>
+                    </form>
+                    
+                    <!-- Social Login -->
+                    <div class="auth-divider">或</div>
+                    <div class="social-login">
+                        <button class="btn-social" onclick="socialLogin('wechat')">
+                            <span>💬</span> 微信登录
+                        </button>
+                        <button class="btn-social" onclick="socialLogin('google')">
+                            <span>🔍</span> Google
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- User Info (shown after login) -->
+                <div class="auth-card user-info" id="userInfoCard">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div class="user-name" id="userName">用户名</div>
+                    <div class="user-email" id="userEmail">user@example.com</div>
+                    <button class="btn-submit" onclick="goToDashboard()">进入行情中心</button>
+                    <button class="btn-submit" style="margin-top: var(--space-3); background: rgba(255,255,255,0.05); color: var(--text-primary);" onclick="logout()">退出登录</button>
+                </div>
+                
+                <!-- Footer -->
+                <div class="auth-footer">
+                    <p>© 2026 GoldPulse. 投资有风险，入市需谨慎。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/security.js"></script>
+    <script>
+        // Security notice
+        console.info('%c⚠️ 安全提示', 'color: #ffd700; font-size: 14px; font-weight: bold;', 
+            '\n当前为前端演示版本，用户数据存储在本地。\n生产环境请使用服务端认证系统。');
+        
+        // Check URL params
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const action = params.get('action');
+            
+            if (action === 'register') {
+                document.querySelectorAll('.auth-tab')[1].click();
+            }
+            
+            checkLoginStatus();
+        });
+        
+        // Switch tab
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+            
+            hideMessages();
+        }
+        
+        // Handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            hideMessages();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (!email || !password) {
+                showError('请输入邮箱和密码');
+                return;
+            }
+            
+            const safeEmail = SecurityUtils.escapeHtml(email);
+            const users = SecurityUtils.storage.get('users') || [];
+            const user = users.find(u => u.email === safeEmail);
+            
+            if (!user) {
+                await new Promise(r => setTimeout(r, 100 + Math.random() * 200));
+                showError('邮箱或密码错误');
+                return;
+            }
+            
+            const passwordHash = await SecurityUtils.hashPassword(password, user.salt);
+            
+            if (passwordHash !== user.passwordHash) {
+                showError('邮箱或密码错误');
+                return;
+            }
+            
+            const session = SecurityUtils.createSession(user, rememberMe ? 168 : 2);
+            
+            if (rememberMe) {
+                SecurityUtils.storage.set('session', session);
+            } else {
+                sessionStorage.setItem('gp_session', JSON.stringify(session));
+            }
+            
+            showSuccess('登录成功！');
+            setTimeout(() => {
+                showUserInfo(user);
+            }, 500);
+        }
+        
+        // Handle register
+        async function handleRegister(event) {
+            event.preventDefault();
+            hideMessages();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (!name || !email || !password) {
+                showError('请填写所有必填项');
+                return;
+            }
+            
+            const safeName = SecurityUtils.escapeHtml(name);
+            const safeEmail = SecurityUtils.escapeHtml(email);
+            
+            if (password !== confirmPassword) {
+                showError('两次输入的密码不一致');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('密码长度至少6位');
+                return;
+            }
+            
+            const hasLetter = /[a-zA-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            if (!hasLetter || !hasNumber) {
+                showError('密码需包含字母和数字');
+                return;
+            }
+            
+            const users = SecurityUtils.storage.get('users') || [];
+            
+            if (users.some(u => u.email === safeEmail)) {
+                showError('该邮箱已注册');
+                return;
+            }
+            
+            const salt = SecurityUtils.generateSalt();
+            const passwordHash = await SecurityUtils.hashPassword(password, salt);
+            
+            const newUser = {
+                name: safeName,
+                email: safeEmail,
+                passwordHash: passwordHash,
+                salt: salt,
+                registerTime: new Date().toISOString(),
+                userId: SecurityUtils.generateSessionToken().slice(0, 16)
+            };
+            
+            users.push(newUser);
+            SecurityUtils.storage.set('users', users);
+            
+            showSuccess('注册成功！请登录');
+            setTimeout(() => {
+                document.getElementById('registerForm').reset();
+                document.querySelector('.auth-tab').click();
+            }, 1500);
+        }
+        
+        // Check login status
+        function checkLoginStatus() {
+            let session = null;
+            const sessionData = sessionStorage.getItem('gp_session') || SecurityUtils.storage.get('session');
+            
+            if (sessionData) {
+                session = typeof sessionData === 'string' ? JSON.parse(sessionData) : sessionData;
+            }
+            
+            if (session && SecurityUtils.isSessionValid(session)) {
+                showUserInfo({ name: session.name, email: session.email });
+            } else {
+                SecurityUtils.storage.remove('session');
+                sessionStorage.removeItem('gp_session');
+            }
+        }
+        
+        // Show user info
+        function showUserInfo(user) {
+            document.getElementById('authCard').style.display = 'none';
+            document.querySelector('.auth-header').style.display = 'none';
+            document.getElementById('userInfoCard').classList.add('show');
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+        }
+        
+        // Logout
+        function logout() {
+            SecurityUtils.storage.remove('session');
+            sessionStorage.removeItem('gp_session');
+            localStorage.removeItem('gp_session');
+            localStorage.removeItem('goldpulse_session');
+            
+            document.getElementById('authCard').style.display = 'block';
+            document.querySelector('.auth-header').style.display = 'block';
+            document.getElementById('userInfoCard').classList.remove('show');
+            document.getElementById('loginForm').reset();
+            hideMessages();
+            
+            showSuccess('已退出登录');
+        }
+        
+        // Go to dashboard
+        function goToDashboard() {
+            window.location.href = 'markets.html';
+        }
+        
+        // Social login
+        function socialLogin(provider) {
+            showSuccess(`正在使用${provider === 'wechat' ? '微信' : 'Google'}登录...`);
+        }
+        
+        // Forgot password
+        function forgotPassword() {
+            const email = document.getElementById('loginEmail').value;
+            if (!email) {
+                showError('请输入邮箱地址');
+                return;
+            }
+            showSuccess('密码重置链接已发送到您的邮箱');
+        }
+        
+        // Show error
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+        
+        // Show success
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.classList.add('show');
+        }
+        
+        // Hide messages
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

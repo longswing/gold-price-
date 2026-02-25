@@ -1,0 +1,576 @@
+/* ============================================
+   GoldPulse Animations v2.0
+   动效系统样式
+   ============================================ */
+
+/* ============================================
+   1. 进入动画
+   ============================================ */
+
+/* 淡入 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.6s var(--ease-out) forwards;
+}
+
+/* 淡入上滑 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeInUp {
+    opacity: 0;
+    animation: fadeInUp 0.6s var(--ease-out) forwards;
+}
+
+/* 淡入下滑 */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeInDown {
+    opacity: 0;
+    animation: fadeInDown 0.6s var(--ease-out) forwards;
+}
+
+/* 淡入左滑 */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fadeInLeft {
+    opacity: 0;
+    animation: fadeInLeft 0.6s var(--ease-out) forwards;
+}
+
+/* 淡入右滑 */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fadeInRight {
+    opacity: 0;
+    animation: fadeInRight 0.6s var(--ease-out) forwards;
+}
+
+/* 缩放进入 */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-scaleIn {
+    opacity: 0;
+    animation: scaleIn 0.5s var(--ease-spring) forwards;
+}
+
+/* 模糊进入 */
+@keyframes blurIn {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+.animate-blurIn {
+    animation: blurIn 0.8s var(--ease-out) forwards;
+}
+
+/* ============================================
+   2. 悬浮动画
+   ============================================ */
+
+/* 浮动效果 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 轻微浮动 */
+@keyframes floatSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.animate-float-subtle {
+    animation: floatSubtle 4s ease-in-out infinite;
+}
+
+/* 脉冲缩放 */
+@keyframes pulseScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.animate-pulse-scale {
+    animation: pulseScale 2s ease-in-out infinite;
+}
+
+/* ============================================
+   3. 光效动画
+   ============================================ */
+
+/* 金色光晕脉冲 */
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
+    50% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); }
+}
+
+.animate-glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* 光晕呼吸 */
+@keyframes glowBreathe {
+    0%, 100% { 
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        opacity: 0.8;
+    }
+    50% { 
+        box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+        opacity: 1;
+    }
+}
+
+.animate-glow-breathe {
+    animation: glowBreathe 4s ease-in-out infinite;
+}
+
+/* 渐变流动 */
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientFlow 8s ease infinite;
+}
+
+/* 闪烁效果 - 价格上涨 */
+@keyframes flashUp {
+    0%, 100% { 
+        color: inherit;
+        text-shadow: none;
+    }
+    50% { 
+        color: var(--up);
+        text-shadow: 0 0 20px var(--up-glow);
+    }
+}
+
+.animate-flash-up {
+    animation: flashUp 0.6s var(--ease-out);
+}
+
+/* 闪烁效果 - 价格下跌 */
+@keyframes flashDown {
+    0%, 100% { 
+        color: inherit;
+        text-shadow: none;
+    }
+    50% { 
+        color: var(--down);
+        text-shadow: 0 0 20px var(--down-glow);
+    }
+}
+
+.animate-flash-down {
+    animation: flashDown 0.6s var(--ease-out);
+}
+
+/* 实时脉冲点 */
+@keyframes livePulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.5;
+        transform: scale(1.3);
+    }
+}
+
+.animate-live-pulse {
+    animation: livePulse 2s ease-in-out infinite;
+}
+
+/* 光泽扫过 */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   4. 滚动触发动画
+   ============================================ */
+
+/* 滚动显示 - 从下方 */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.6s var(--ease-out);
+}
+
+.reveal-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 滚动显示 - 从左侧 */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: all 0.6s var(--ease-out);
+}
+
+.reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 滚动显示 - 从右侧 */
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.6s var(--ease-out);
+}
+
+.reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 滚动显示 - 缩放 */
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.6s var(--ease-spring);
+}
+
+.reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 交错动画延迟 */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+
+/* ============================================
+   5. 滚动条动画
+   ============================================ */
+
+@keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+    animation: ticker 30s linear infinite;
+}
+
+/* ============================================
+   6. 背景动画
+   ============================================ */
+
+/* 网格背景动画 */
+@keyframes gridMove {
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+}
+
+.animate-grid {
+    animation: gridMove 20s linear infinite;
+}
+
+/* 粒子漂浮 */
+@keyframes particleFloat {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(20px, -30px) scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.animate-particle {
+    animation: particleFloat 8s ease-in-out infinite;
+}
+
+/* ============================================
+   7. 悬停效果
+   ============================================ */
+
+/* 悬浮上移 */
+.hover-lift {
+    transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+/* 悬浮放大 */
+.hover-scale {
+    transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* 发光悬停 */
+.hover-glow {
+    transition: box-shadow var(--duration-normal);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--glow-gold);
+}
+
+/* 下划线动画 */
+.hover-underline {
+    position: relative;
+}
+
+.hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold-primary);
+    transition: width var(--duration-normal) var(--ease-out);
+}
+
+.hover-underline:hover::after {
+    width: 100%;
+}
+
+/* ============================================
+   8. 加载动画
+   ============================================ */
+
+/* 旋转加载 */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* 骨架屏闪光 */
+@keyframes skeletonShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--bg-tertiary) 25%,
+        var(--bg-elevated) 50%,
+        var(--bg-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+/* 弹跳 */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.animate-bounce {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+/* 弹跳（轻微） */
+@keyframes bounceSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.animate-bounce-subtle {
+    animation: bounceSubtle 2s ease-in-out infinite;
+}
+
+/* ============================================
+   9. 特殊效果
+   ============================================ */
+
+/* 打字机效果 */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+.typing-effect {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--gold-primary);
+    animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
+}
+
+/* 模糊渐入 */
+@keyframes blurInScale {
+    0% {
+        opacity: 0;
+        filter: blur(20px);
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+}
+
+.animate-blur-in-scale {
+    animation: blurInScale 1s var(--ease-out) forwards;
+}
+
+/* 3D翻转 */
+@keyframes flipIn {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0);
+    }
+}
+
+.animate-flip-in {
+    opacity: 0;
+    animation: flipIn 0.6s var(--ease-out) forwards;
+}
+
+/* 抖动 */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-shake {
+    animation: shake 0.5s var(--ease-out);
+}
+
+/* ============================================
+   10. 动画工具类
+   ============================================ */
+
+/* 动画延迟 */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* 动画持续时间 */
+.duration-fast { animation-duration: var(--duration-fast); }
+.duration-normal { animation-duration: var(--duration-normal); }
+.duration-slow { animation-duration: var(--duration-slow); }
+.duration-slower { animation-duration: var(--duration-slower); }
+
+/* 填充模式 */
+.fill-forwards { animation-fill-mode: forwards; }
+.fill-backwards { animation-fill-mode: backwards; }
+.fill-both { animation-fill-mode: both; }
+
+/* 动画状态 */
+.paused { animation-play-state: paused; }
+.running { animation-play-state: running; }
+
+/* 无限循环 */
+.infinite { animation-iteration-count: infinite; }
+
+/* 减少动画（无障碍） */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

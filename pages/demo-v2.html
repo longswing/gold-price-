@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldPulse v2.0 - Design System Demo</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    <style>
+        /* Demo页面专用样式 */
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: var(--nav-height);
+        }
+        
+        .demo-section {
+            padding: var(--space-16) var(--space-6);
+            max-width: var(--container-xl);
+            margin: 0 auto;
+        }
+        
+        .demo-section-title {
+            font: var(--text-h2);
+            margin-bottom: var(--space-8);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+        }
+        
+        .demo-item {
+            padding: var(--space-6);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+        
+        .demo-item-label {
+            font: var(--text-caption);
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Hero预览 */
+        .demo-hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-bg-hero);
+            border-radius: var(--radius-xl);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: var(--space-8);
+        }
+        
+        .demo-hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            animation: glowBreathe 4s ease-in-out infinite;
+        }
+        
+        .demo-hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .demo-hero-title {
+            font: var(--text-display);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-4);
+        }
+        
+        /* 颜色展示 */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-4);
+        }
+        
+        .color-item {
+            aspect-ratio: 1;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: flex-end;
+            padding: var(--space-3);
+            font: var(--text-caption);
+        }
+        
+        /* 动画展示 */
+        .animation-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+        
+        .animation-box {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        /* 导航演示 */
+        .demo-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-nav);
+        }
+        
+        @keyframes glowBreathe {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航演示 -->
+    <nav class="navbar-v2 demo-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">
+                    <i class="ph-fill ph-coin"></i>
+                </div>
+                <span>GoldPulse v2</span>
+            </a>
+            <div class="nav-menu">
+                <a href="#buttons" class="nav-link">按钮</a>
+                <a href="#cards" class="nav-link">卡片</a>
+                <a href="#colors" class="nav-link">色彩</a>
+                <a href="#animations" class="nav-link">动效</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-sm btn-secondary">登录</button>
+                <button class="btn btn-sm btn-primary">注册</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero预览 -->
+    <section class="demo-hero">
+        <div class="demo-hero-content">
+            <h1 class="demo-hero-title animate-fadeInUp">GoldPulse v2.0</h1>
+            <p class="text-secondary animate-fadeInUp delay-200">
+                下一代黄金投资平台视觉设计系统
+            </p>
+            <div class="flex justify-center gap-4 mt-8 animate-fadeInUp delay-400">
+                <a href="#buttons" class="btn btn-primary btn-lg">
+                    浏览组件
+                </a>
+                <a href="../docs/design-v2/README.md" class="btn btn-secondary btn-lg">
+                    查看文档
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 按钮展示 -->
+    <section class="demo-section" id="buttons">
+        <h2 class="demo-section-title">按钮组件</h2>
+        <div class="demo-grid">
+            <div class="demo-item">
+                <div class="demo-item-label">主要按钮</div>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn btn-sm btn-primary">小按钮</button>
+                    <button class="btn btn-primary">默认按钮</button>
+                    <button class="btn btn-lg btn-primary">大按钮</button>
+                    <button class="btn btn-xl btn-primary">超大按钮</button>
+                </div>
+            </div>
+            <div class="demo-item">
+                <div class="demo-item-label">次要按钮</div>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn btn-sm btn-secondary">小按钮</button>
+                    <button class="btn btn-secondary">默认按钮</button>
+                    <button class="btn btn-lg btn-secondary">大按钮</button>
+                </div>
+            </div>
+            <div class="demo-item">
+                <div class="demo-item-label">发光按钮</div>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn btn-glow">
+                        <i class="ph ph-sparkle"></i>
+                        发光效果
+                    </button>
+                    <button class="btn btn-glow btn-lg">
+                        大发光按钮
+                    </button>
+                </div>
+            </div>
+            <div class="demo-item">
+                <div class="demo-item-label">幽灵按钮</div>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn btn-ghost">幽灵按钮</button>
+                    <button class="btn btn-ghost">
+                        <i class="ph ph-arrow-right"></i>
+                        带图标
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 卡片展示 -->
+    <section class="demo-section" id="cards">
+        <h2 class="demo-section-title">卡片组件</h2>
+        <div class="demo-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">基础卡片</h3>
+                    <span class="badge badge-gold">Gold</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-secondary">这是基础卡片样式，带有金色标签和默认悬浮效果。</p>
+                </div>
+            </div>
+            
+            <div class="card card-glass">
+                <div class="card-header">
+                    <h3 class="card-title">玻璃卡片</h3>
+                    <span class="badge badge-purple">Purple</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-secondary">玻璃拟态效果卡片，backdrop-filter模糊。</p>
+                </div>
+            </div>
+            
+            <div class="card card-spotlight">
+                <div class="card-header">
+                    <h3 class="card-title">光晕追踪</h3>
+                    <span class="badge badge-live">Live</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-secondary">悬浮时显示光晕追踪效果，移动鼠标查看。</p>
+                </div>
+            </div>
+            
+            <div class="card card-gradient-border">
+                <div style="padding: var(--space-6);">
+                    <h3 class="card-title mb-4">渐变边框</h3>
+                    <p class="text-secondary">使用CSS渐变实现的边框效果。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 色彩展示 -->
+    <section class="demo-section" id="colors">
+        <h2 class="demo-section-title">色彩系统</h2>
+        
+        <h3 class="text-h5 mb-4">金色系统</h3>
+        <div class="color-grid mb-8">
+            <div class="color-item" style="background: var(--gold-primary);">
+                <span style="color: #000;">Primary</span>
+            </div>
+            <div class="color-item" style="background: var(--gold-secondary);">
+                <span style="color: #000;">Secondary</span>
+            </div>
+            <div class="color-item" style="background: var(--gold-light);">
+                <span style="color: #000;">Light</span>
+            </div>
+            <div class="color-item" style="background: var(--gold-dark);">
+                <span style="color: #fff;">Dark</span>
+            </div>
+        </div>
+        
+        <h3 class="text-h5 mb-4">辅助色系统</h3>
+        <div class="color-grid mb-8">
+            <div class="color-item" style="background: var(--accent-purple);">
+                <span style="color: #fff;">Purple</span>
+            </div>
+            <div class="color-item" style="background: var(--accent-blue);">
+                <span style="color: #fff;">Blue</span>
+            </div>
+            <div class="color-item" style="background: var(--accent-cyan);">
+                <span style="color: #000;">Cyan</span>
+            </div>
+        </div>
+        
+        <h3 class="text-h5 mb-4">背景层次</h3>
+        <div class="color-grid">
+            <div class="color-item" style="background: var(--bg-deep); border: 1px solid var(--border-color);">
+                <span style="color: #fff;">Deep</span>
+            </div>
+            <div class="color-item" style="background: var(--bg-primary); border: 1px solid var(--border-color);">
+                <span style="color: #fff;">Primary</span>
+            </div>
+            <div class="color-item" style="background: var(--bg-secondary);">
+                <span style="color: #fff;">Secondary</span>
+            </div>
+            <div class="color-item" style="background: var(--bg-tertiary);">
+                <span style="color: #fff;">Tertiary</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 动画展示 -->
+    <section class="demo-section" id="animations">
+        <h2 class="demo-section-title">动效系统</h2>
+        <p class="text-secondary mb-8">点击动画卡片重新播放动画</p>
+        
+        <div class="demo-grid">
+            <div class="demo-item">
+                <div class="demo-item-label">进入动画</div>
+                <div class="animation-grid">
+                    <div class="animation-box" onclick="playAnimation(this, 'animate-fadeInUp')">
+                        <i class="ph ph-arrow-up"></i>
+                    </div>
+                    <div class="animation-box" onclick="playAnimation(this, 'animate-fadeInDown')">
+                        <i class="ph ph-arrow-down"></i>
+                    </div>
+                    <div class="animation-box" onclick="playAnimation(this, 'animate-scaleIn')">
+                        <i class="ph ph-arrows-out"></i>
+                    </div>
+                    <div class="animation-box" onclick="playAnimation(this, 'animate-blurIn')">
+                        <i class="ph ph-drop"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-item-label">持续动画</div>
+                <div class="animation-grid">
+                    <div class="animation-box animate-float">
+                        <i class="ph ph-airplane"></i>
+                    </div>
+                    <div class="animation-box animate-glow-pulse">
+                        <i class="ph ph-lightning"></i>
+                    </div>
+                    <div class="animation-box animate-bounce">
+                        <i class="ph ph-ball"></i>
+                    </div>
+                    <div class="animation-box animate-spin" style="animation-duration: 3s;">
+                        <i class="ph ph-arrows-clockwise"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-item-label">渐变文字</div>
+                <div class="space-y-4">
+                    <h3 class="text-2xl text-gradient-gold">金色渐变文字</h3>
+                    <h3 class="text-2xl text-gradient-purple">紫色渐变文字</h3>
+                    <h3 class="text-2xl text-gradient-aurora">极光渐变文字</h3>
+                </div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-item-label">光晕效果</div>
+                <div class="animation-grid">
+                    <div class="animation-box glow-gold" style="background: var(--bg-tertiary);">
+                        <i class="ph ph-sun text-gold"></i>
+                    </div>
+                    <div class="animation-box glow-purple" style="background: var(--bg-tertiary);">
+                        <i class="ph ph-moon text-purple"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 价格展示 -->
+    <section class="demo-section">
+        <h2 class="demo-section-title">价格显示组件</h2>
+        <div class="demo-grid">
+            <div class="card card-glass">
+                <div class="demo-item-label">美元/盎司</div>
+                <div class="price-display">
+                    <span class="price-label">XAU/USD</span>
+                    <span class="price-value gold text-4xl">$5,177.31</span>
+                    <span class="price-change up">
+                        <i class="ph ph-trend-up"></i>
+                        +0.37%
+                    </span>
+                </div>
+            </div>
+            
+            <div class="card card-glass">
+                <div class="demo-item-label">人民币/克</div>
+                <div class="price-display">
+                    <span class="price-label">CNY/g</span>
+                    <span class="price-value gold text-4xl">¥1,198.47</span>
+                    <span class="price-change up">
+                        <i class="ph ph-trend-up"></i>
+                        +2.15
+                    </span>
+                </div>
+            </div>
+            
+            <div class="card card-glass">
+                <div class="demo-item-label">下跌示例</div>
+                <div class="price-display">
+                    <span class="price-label">NASDAQ</span>
+                    <span class="price-value text-4xl" style="color: var(--text-primary);">22,863.68</span>
+                    <span class="price-change down">
+                        <i class="ph ph-trend-down"></i>
+                        -0.52%
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer style="border-top: 1px solid var(--border-color); padding: var(--space-12) var(--space-6); margin-top: var(--space-16);">
+        <div class="text-center">
+            <p class="text-secondary">GoldPulse Design System v2.0</p>
+            <p class="text-tertiary mt-2">参考: Apple · Stripe · Linear · Vercel · Framer</p>
+        </div>
+    </footer>
+
+    <script>
+        // 重新播放动画
+        function playAnimation(element, animationClass) {
+            element.classList.remove(animationClass);
+            void element.offsetWidth; // 触发重排
+            element.classList.add(animationClass);
+        }
+        
+        // 光晕追踪效果
+        document.querySelectorAll('.card-spotlight').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+        
+        // 导航滚动效果
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.demo-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

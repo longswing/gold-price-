@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻详情 - GoldPulse</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <style>
+        .news-detail-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--gold-primary);
+        }
+        
+        .news-detail-header {
+            margin-bottom: 32px;
+        }
+        
+        .news-detail-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--gold-alpha);
+            color: var(--gold-primary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .news-detail-title {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        
+        .news-detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .news-detail-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: #000;
+            font-weight: 600;
+        }
+        
+        .news-detail-content {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+        
+        .news-detail-content p {
+            margin-bottom: 20px;
+        }
+        
+        .news-detail-content h2 {
+            font-size: 1.5rem;
+            margin: 40px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .news-detail-content h3 {
+            font-size: 1.25rem;
+            margin: 32px 0 16px;
+        }
+        
+        .news-detail-content ul,
+        .news-detail-content ol {
+            margin-bottom: 20px;
+            padding-left: 24px;
+        }
+        
+        .news-detail-content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--gold-primary);
+            padding: 20px 24px;
+            margin: 24px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+        
+        .highlight-box p {
+            margin: 0;
+        }
+        
+        .news-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .news-action-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .news-action-btn:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
+        
+        .related-news {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .related-news h3 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+        
+        .related-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .related-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        
+        .related-item:hover {
+            border-color: var(--gold-primary);
+        }
+        
+        .related-thumb {
+            width: 100px;
+            height: 70px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .related-content h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .related-content span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .news-detail-title {
+                font-size: 1.5rem;
+            }
+            
+            .news-detail-meta {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <div class="logo-icon">🥇</div>
+                <span>GoldPulse</span>
+            </a>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="markets.html" class="nav-link">行情</a>
+                <a href="analysis.html" class="nav-link">分析</a>
+                <a href="news.html" class="nav-link active">资讯</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-secondary btn-sm" onclick="location.href='login.html'">登录</button>
+                <button class="btn btn-primary btn-sm" onclick="location.href='login.html?action=register'">注册</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <article class="news-detail-page">
+            <!-- 面包屑 -->
+            <nav class="breadcrumb">
+                <a href="../index.html">首页</a>
+                <span>›</span>
+                <a href="news.html">资讯</a>
+                <span>›</span>
+                <span id="breadcrumbTag">黄金市场</span>
+            </nav>
+
+            <!-- 文章头部 -->
+            <header class="news-detail-header">
+                <span class="news-detail-tag" id="newsTag">黄金市场</span>
+                <h1 class="news-detail-title" id="newsTitle">黄金价格突破5200美元关口，创近期新高</h1>
+                <div class="news-detail-meta">
+                    <div class="news-detail-author">
+                        <div class="author-avatar">G</div>
+                        <span>GoldPulse 分析师</span>
+                    </div>
+                    <span id="newsTime">2026年2月25日 14:30</span>
+                    <span id="newsViews">2,341 阅读</span>
+                </div>
+            </header>
+
+            <!-- 文章内容 -->
+            <div class="news-detail-content" id="newsContent">
+                <!-- 动态加载 -->
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="news-actions">
+                <button class="news-action-btn" onclick="shareNews()">📤 分享</button>
+                <button class="news-action-btn" onclick="collectNews()">🔖 收藏</button>
+                <button class="news-action-btn" onclick="printNews()">🖨️ 打印</button>
+            </div>
+
+            <!-- 相关新闻 -->
+            <section class="related-news">
+                <h3>相关阅读</h3>
+                <div class="related-list" id="relatedList">
+                    <!-- 动态加载 -->
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="margin-top: 0; border-top: none;">
+            <span>© 2026 GoldPulse. 资讯仅供参考。</span>
+        </div>
+    </footer>
+
+    <script>
+        // 新闻数据
+        const newsData = {
+            1: {
+                title: '黄金价格突破5200美元关口，创近期新高',
+                tag: '黄金市场',
+                time: '2026年2月25日 14:30',
+                views: '2,341',
+                content: `
+                    <p>受全球地缘政治紧张局势影响，避险资产需求增加，黄金价格持续走高。周二亚洲交易时段，现货黄金价格突破5200美元/盎司关口，创下近三个月来的新高。</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>市场动态：</strong>黄金自年初以来累计上涨约8%，成为全球表现最好的大类资产之一。</p>
+                    </div>
+                    
+                    <h2>上涨原因分析</h2>
+                    
+                    <p>本轮黄金价格上涨主要由以下几方面因素推动：</p>
+                    
+                    <ul>
+                        <li><strong>地缘政治风险升温</strong> - 中东局势持续紧张，乌克兰冲突未见缓解迹象，推升避险需求</li>
+                        <li><strong>美联储政策预期</strong> - 市场普遍预期美联储将在年内降息，美元走弱利好金价</li>
+                        <li><strong>央行持续购金</strong> - 全球央行连续18个月净买入黄金，中国央行黄金储备持续增加</li>
+                        <li><strong>技术面突破</strong> - 金价突破关键阻力位，引发算法交易跟进买入</li>
+                    </ul>
+                    
+                    <h2>机构观点</h2>
+                    
+                    <p>高盛集团最新报告将年底黄金目标价上调至5500美元/盎司，认为"去美元化"趋势将持续支撑黄金需求。</p>
+                    
+                    <p>瑞银财富管理的分析师表示："在当前宏观环境下，黄金作为资产配置的价值凸显。建议投资者将黄金配置比例提高至5-10%。"</p>
+                    
+                    <h2>后市展望</h2>
+                    
+                    <p>分析师认为，黄金短期仍有上涨空间，但需要关注以下几个关键因素：</p>
+                    
+                    <ol>
+                        <li>美联储货币政策会议纪要释放的信号</li>
+                        <li>美国通胀数据走势</li>
+                        <li>地缘政治局势变化</li>
+                        <li>美元指数走向</li>
+                    </ol>
+                    
+                    <p>技术上，金价已突破5200美元阻力位，下一目标位看向5300美元区域。支撑位在5100美元附近。</p>
+                `
+            },
+            2: {
+                title: '美联储会议纪要：通胀回落仍需时间',
+                tag: '美联储',
+                time: '2026年2月24日 10:15',
+                views: '1,892',
+                content: `
+                    <p>美联储最新公布的会议纪要显示，多数委员认为通胀压力仍然存在，短期内降息可能性较低。这一表态推动美元指数上涨，美股三大指数集体收跌。</p>
+                    
+                    <h2>会议纪要要点</h2>
+                    
+                    <p>在1月的货币政策会议上，美联储决定维持基准利率不变。最新公布的会议纪要透露了以下关键信息：</p>
+                    
+                    <ul>
+                        <li>多数委员认为通胀回落速度慢于预期</li>
+                        <li>劳动力市场依然强劲，工资增速仍然较高</li>
+                        <li>需要更多证据确认通胀正可持续地向2%目标靠近</li>
+                        <li>过早降息可能损害已取得的通胀控制成果</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>关键表述：</strong>"在确信通胀可持续地向2%目标靠近之前，维持当前利率水平是适宜的。"</p>
+                    </div>
+                    
+                    <h2>市场反应</h2>
+                    
+                    <p>会议纪要公布后，市场对美联储降息预期降温。根据CME美联储观察工具，市场预期3月降息的概率从30%降至15%，首次降息时点预期推迟至6月。</p>
+                    
+                    <p>美元走强压制了以美元计价的大宗商品价格，黄金价格一度回落至5150美元附近。美股三大指数全线收跌，纳斯达克指数下跌1.2%。</p>
+                    
+                    <h2>分析师解读</h2>
+                    
+                    <p>摩根大通首席经济学家表示："美联储的谨慎态度符合预期。考虑到核心通胀仍高于3%，美联储需要更多时间来确认通胀趋势。"</p>
+                    
+                    <p>中信证券研究报告指出："美联储政策立场维持鹰派，将支撑美元在短期内保持强势。这对新兴市场货币和黄金可能构成一定压力。"</p>
+                `
+            },
+            3: {
+                title: '亚洲股市普遍上涨，恒生指数突破26700点',
+                tag: '全球市场',
+                time: '2026年2月25日 11:45',
+                views: '1,567',
+                content: `
+                    <p>受益于积极的宏观经济数据，亚洲主要股市今日普遍收涨。香港恒生指数创下近三个月新高，突破26700点关口。</p>
+                    
+                    <h2>市场表现</h2>
+                    
+                    <p>今日亚洲主要股市收盘情况：</p>
+                    
+                    <ul>
+                        <li><strong>香港恒生指数</strong>：上涨0.56%，收报26738点</li>
+                        <li><strong>日本日经225指数</strong>：上涨0.82%，收报39250点</li>
+                        <li><strong>韩国KOSPI指数</strong>：上涨0.43%，收报2680点</li>
+                        <li><strong>新加坡海峡时报指数</strong>：上涨0.35%，收报3220点</li>
+                    </ul>
+                    
+                    <h2>港股亮点</h2>
+                    
+                    <p>恒生指数成分股中，科技股表现抢眼。腾讯控股上涨2.1%，阿里巴巴上涨1.8%。医药板块也表现强劲，药明生物上涨3.5%。</p>
+                    
+                    <p>南下资金今日净流入超过50亿港元，连续第5个交易日净流入。南向资金偏好科技和消费板块。</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>券商观点：</strong>高盛上调恒生指数年底目标至28500点，看好科网股估值修复机会。</p>
+                    </div>
+                    
+                    <h2>驱动因素</h2>
+                    
+                    <p>亚洲股市上涨主要受以下因素推动：</p>
+                    
+                    <ol>
+                        <li>中国制造业PMI连续两个月扩张</li>
+                        <li>美国科技股业绩超预期，带动亚洲科技股情绪</li>
+                        <li>美联储降息预期支撑风险偏好</li>
+                        <li>区域内贸易数据改善</li>
+                    </ol>
+                `
+            },
+            4: {
+                title: '国际油价震荡上行，WTI突破80美元',
+                tag: '原油',
+                time: '2026年2月25日 09:30',
+                views: '1,234',
+                content: `
+                    <p>供应紧张预期支撑油价，同时主要经济体需求回暖迹象明显。周二亚市，WTI原油期货价格突破80美元/桶关口，为近四个月来首次。</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>实时行情：</strong>WTI原油报80.35美元/桶，上涨1.2%；布伦特原油报84.62美元/桶，上涨1.0%。</p>
+                    </div>
+                    
+                    <h2>供应端收紧</h2>
+                    
+                    <p>OPEC+持续减产对油价形成有力支撑：</p>
+                    
+                    <ul>
+                        <li>OPEC+此前承诺的220万桶/日自愿减产延长至第二季度</li>
+                        <li>俄罗斯表示将在第二季度额外减产47.1万桶/日</li>
+                        <li>美国战略石油储备降至近40年低位，补库需求上升</li>
+                        <li>地缘政治风险导致部分运输航线受阻</li>
+                    </ul>
+                    
+                    <h2>需求端回暖</h2>
+                    
+                    <p>全球经济复苏迹象支撑原油需求预期：</p>
+                    
+                    <ul>
+                        <li>美国原油库存连续三周下降，降幅超预期</li>
+                        <li>中国春节假期后工业活动明显恢复</li>
+                        <li>印度柴油需求创历史同期新高</li>
+                        <li>航空燃油需求随全球旅游复苏而增长</li>
+                    </ul>
+                    
+                    <h2>机构观点</h2>
+                    
+                    <p>摩根士丹利研报指出："考虑到供应端的持续收紧和需求端的稳健复苏，我们上调今年下半年油价预测至85美元/桶。"</p>
+                    
+                    <p>高盛能源团队认为："当前油市正处于再平衡过程中，若OPEC+在下次会议上维持当前减产力度，油价可能测试85-90美元区间。"</p>
+                    
+                    <h2>OPEC+会议前瞻</h2>
+                    
+                    <p>OPEC+将于下周举行部长级会议，市场关注焦点包括：</p>
+                    
+                    <ol>
+                        <li>是否延长当前减产协议至下半年</li>
+                        <li>俄罗斯的额外减产承诺执行情况</li>
+                        <li>各成员国对油价水平的满意程度</li>
+                        <li>对非OPEC产量增长的评估</li>
+                    </ol>
+                    
+                    <p>技术面看，WTI突破80美元关键阻力位后，上方空间打开，下一目标位看向85美元。支撑位在77美元。</p>
+                `
+            },
+            5: {
+                title: '比特币ETF持续净流入，机构配置需求旺盛',
+                tag: '加密货币',
+                time: '2026年2月24日 16:00',
+                views: '2,156',
+                content: `
+                    <p>数据显示，上周主要比特币ETF产品合计净流入超过20亿美元，显示出机构投资者对数字资产的持续兴趣。比特币价格一度突破65000美元，创两年多来新高。</p>
+                    
+                    <h2>ETF资金流向</h2>
+                    
+                    <p>自美国SEC批准比特币现货ETF以来，资金持续涌入：</p>
+                    
+                    <ul>
+                        <li>贝莱德旗下IBIT基金持仓量突破30万枚比特币</li>
+                        <li>富达FBTC基金周净流入超8亿美元</li>
+                        <li>ARK Invest的ARKB基金也录得显著资金流入</li>
+                        <li>灰度GBTC资金流出速度明显放缓</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>里程碑事件：</strong>比特币ETF总资产规模已突破500亿美元，成为历史上增长最快的ETF类别。</p>
+                    </div>
+                    
+                    <h2>机构配置加速</h2>
+                    
+                    <p>越来越多的机构投资者开始配置比特币：</p>
+                    
+                    <ul>
+                        <li>多家养老基金在其另类投资组合中配置比特币ETF</li>
+                        <li>对冲基金将比特币作为宏观对冲工具</li>
+                        <li>家族办公室增加数字资产配置比例</li>
+                        <li>部分保险公司开始试水比特币投资</li>
+                    </ul>
+                    
+                    <h2>市场展望</h2>
+                    
+                    <p>渣打银行最新报告预测，比特币有望在2026年底前冲击10万美元关口。主要推动因素包括：</p>
+                    
+                    <ol>
+                        <li>4月比特币减半事件带来的供应收缩</li>
+                        <li>ETF资金持续流入形成的需求支撑</li>
+                        <li>美联储降息周期利好风险资产</li>
+                        <li>加密货币监管框架逐步明朗化</li>
+                    </ol>
+                    
+                    <h2>风险提示</h2>
+                    
+                    <p>尽管机构配置需求旺盛，但投资者仍需注意以下风险：</p>
+                    
+                    <ul>
+                        <li>比特币价格波动性仍然较高</li>
+                        <li>监管政策变化可能带来不确定性</li>
+                        <li>ETF溢价/折价可能偏离现货价格</li>
+                        <li>技术风险和安全风险依然存在</li>
+                    </ul>
+                    
+                    <p>分析师建议，机构配置比特币的比例不宜超过投资组合的5%，并应做好长期持有的准备。</p>
+                `
+            },
+            // P0修复: 补充id 6-15的新闻数据，解决资讯页只有1-5条新闻的问题
+            6: {
+                title: '2026年黄金投资策略：专家看好下半年表现',
+                tag: '投资策略',
+                time: '2026年2月23日 09:15',
+                views: '1,876',
+                content: `
+                    <p>随着全球经济不确定性增加，越来越多的投资专家建议将黄金纳入投资组合。多家机构发布2026年黄金投资策略报告，普遍看好下半年黄金表现。</p>
+                    
+                    <h2>机构观点汇总</h2>
+                    
+                    <p>世界黄金协会最新报告指出，以下因素将支撑2026年黄金价格：</p>
+                    
+                    <ul>
+                        <li><strong>央行购金持续</strong> - 预计全球央行将继续增加黄金储备</li>
+                        <li><strong>地缘风险溢价</strong> - 中东、东欧局势不确定性支撑避险需求</li>
+                        <li><strong>美联储降息周期</strong> - 利率下行利好无收益资产黄金</li>
+                        <li><strong>去美元化趋势</strong> - 多国寻求储备资产多元化</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>目标价位：</strong>高盛将2026年底黄金目标价上调至5500美元/盎司，花旗集团看至5600美元。</p>
+                    </div>
+                    
+                    <h2>配置建议</h2>
+                    
+                    <p>对于不同风险偏好的投资者，专家建议采取差异化配置策略：</p>
+                    
+                    <ol>
+                        <li><strong>保守型投资者</strong> - 配置5-10%的黄金资产，主要通过实物黄金或黄金ETF</li>
+                        <li><strong>平衡型投资者</strong> - 配置10-15%，可加入黄金矿业股增强收益</li>
+                        <li><strong>积极型投资者</strong> - 配置15-20%，利用期货期权进行战术性操作</li>
+                    </ol>
+                    
+                    <h2>风险提示</h2>
+                    
+                    <p>投资黄金也需注意以下风险因素：</p>
+                    
+                    <ul>
+                        <li>美元意外走强可能压制金价</li>
+                        <li>通胀快速回落降低避险需求</li>
+                        <li>加密货币竞争分流部分投资需求</li>
+                    </ul>
+                `
+            },
+            7: {
+                title: '中东局势升温，避险资产需求激增',
+                tag: '地缘政治',
+                time: '2026年2月22日 14:30',
+                views: '2,543',
+                content: `
+                    <p>中东地区局势再度紧张，地区冲突升级风险上升。受此影响，全球避险资产需求激增，黄金价格一度上涨至5250美元/盎司上方。</p>
+                    
+                    <h2>局势最新进展</h2>
+                    
+                    <p>近期中东地区发生多起重大事件：</p>
+                    
+                    <ul>
+                        <li>红海航运安全形势恶化，多家航运公司宣布绕行</li>
+                        <li>地区军事摩擦频率增加，外交斡旋进展缓慢</li>
+                        <li>主要产油国表示可能因安全原因调整产能</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>市场反应：</strong>VIX波动率指数单日上涨15%，美债收益率曲线走平，典型的避险交易模式。</p>
+                    </div>
+                    
+                    <h2>避险资产表现</h2>
+                    
+                    <p>地缘政治紧张推动多类避险资产上涨：</p>
+                    
+                    <ul>
+                        <li><strong>黄金</strong> - 日内涨幅1.2%，突破5250美元</li>
+                        <li><strong>日元</strong> - 对美元升值0.8%</li>
+                        <li><strong>瑞郎</strong> - 避险买盘推动升值0.6%</li>
+                        <li><strong>美债</strong> - 10年期收益率下降8个基点</li>
+                    </ul>
+                    
+                    <h2>分析师观点</h2>
+                    
+                    <p>摩根士丹利分析师表示："地缘政治风险是2026年黄金市场的重要支撑因素。当前的风险溢价水平尚未充分反映潜在的冲突升级可能。"</p>
+                    
+                    <p>瑞银财富管理建议："投资者应在组合中保持5-10%的黄金配置，作为应对地缘政治不确定性的保险。"</p>
+                `
+            },
+            8: {
+                title: '全球央行持续增持黄金储备',
+                tag: '央行动态',
+                time: '2026年2月21日 11:00',
+                views: '1,923',
+                content: `
+                    <p>国际货币基金组织（IMF）最新数据显示，2026年1月全球央行净买入黄金45吨，连续第20个月实现净增持。中国、波兰、土耳其等国央行是主要买家。</p>
+                    
+                    <h2>购金数据一览</h2>
+                    
+                    <p>主要购金央行1月数据：</p>
+                    
+                    <ul>
+                        <li><strong>中国央行</strong> - 增持18吨，黄金储备总量达2,285吨</li>
+                        <li><strong>波兰央行</strong> - 增持12吨，连续第三个月大额买入</li>
+                        <li><strong>土耳其央行</strong> - 增持8吨，继续推进去美元化</li>
+                        <li><strong>印度央行</strong> - 增持4吨，黄金储备创历史纪录</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>历史对比：</strong>2025年全球央行购金总量达1,045吨，创历史第二高水平。</p>
+                    </div>
+                    
+                    <h2>购金动机分析</h2>
+                    
+                    <p>全球央行持续增持黄金主要基于以下考虑：</p>
+                    
+                    <ol>
+                        <li><strong>储备多元化</strong> - 减少对单一货币资产的依赖</li>
+                        <li><strong>应对制裁风险</strong> - 黄金不受政治因素限制</li>
+                        <li><strong>通胀对冲</strong> - 长期保值增值能力</li>
+                        <li><strong>流动性管理</strong> - 黄金是全球公认的高流动性资产</li>
+                    </ol>
+                    
+                    <h2>市场影响</h2>
+                    
+                    <p>世界黄金协会研究主管表示："央行购金已成为黄金需求的重要支柱，预计这一趋势在2026年将持续。"</p>
+                `
+            },
+            9: {
+                title: '上海黄金交易所交易量创新高',
+                tag: '黄金市场',
+                time: '2026年2月20日 16:45',
+                views: '1,654',
+                content: `
+                    <p>上海黄金交易所（SGE）数据显示，2026年2月黄金交易量同比增长35%，创下历史新高。国内投资者对黄金的热情持续升温。</p>
+                    
+                    <h2>交易数据亮点</h2>
+                    
+                    <p>上海黄金交易所2月主要数据：</p>
+                    
+                    <ul>
+                        <li><strong>Au99.99合约</strong> - 日均成交量增长42%</li>
+                        <li><strong>Au(T+D)合约</strong> - 持仓量创历史纪录</li>
+                        <li><strong>黄金ETF</strong> - 场内份额增长28%</li>
+                        <li><strong>参与机构数</strong> - 新增机构账户1,200余个</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>价格走势：</strong>上海金相对伦敦金的溢价扩大至8美元/盎司，显示国内需求强劲。</p>
+                    </div>
+                    
+                    <h2>需求驱动因素</h2>
+                    
+                    <p>国内黄金市场活跃的主要驱动因素包括：</p>
+                    
+                    <ol>
+                        <li>春节后投资需求季节性回升</li>
+                        <li>A股市场波动加大，资金寻求避险</li>
+                        <li>人民币汇率波动增加配置需求</li>
+                        <li>年轻一代投资者加入黄金市场</li>
+                    </ol>
+                    
+                    <h2>未来展望</h2>
+                    
+                    <p>上海黄金交易所表示，将继续完善产品线，推动黄金期权等衍生品发展，满足市场多元化需求。</p>
+                `
+            },
+            10: {
+                title: '黄金技术面分析：关键支撑位在哪里？',
+                tag: '技术分析',
+                time: '2026年2月19日 10:30',
+                views: '2,187',
+                content: `
+                    <p>黄金价格在突破5200美元后继续震荡上行，技术分析师正在密切关注关键支撑和阻力位，以判断下一阶段走势。</p>
+                    
+                    <h2>关键技术位</h2>
+                    
+                    <p>当前黄金价格的关键技术水平：</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>阻力位：</strong><br>R1: 5250美元（心理关口）<br>R2: 5300美元（前期高点）<br>R3: 5400美元（上升通道上轨）</p>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <p><strong>支撑位：</strong><br>S1: 5180美元（20日均线）<br>S2: 5120美元（前期突破位）<br>S3: 5050美元（上升通道下轨）</p>
+                    </div>
+                    
+                    <h2>技术指标解读</h2>
+                    
+                    <p>主要技术指标当前状态：</p>
+                    
+                    <ul>
+                        <li><strong>RSI(14)</strong> - 68，接近超买但未过热</li>
+                        <li><strong>MACD</strong> - 金叉延续，动能柱扩大</li>
+                        <li><strong>布林带</strong> - 价格沿上轨运行，通道向上扩张</li>
+                        <li><strong>移动平均线</strong> - 多头排列完好</li>
+                    </ul>
+                    
+                    <h2>分析师观点</h2>
+                    
+                    <p>花旗技术分析师指出："只要金价保持在5120美元上方，中期上升趋势就保持完好。突破5300美元可能打开通往5500美元的空间。"</p>
+                    
+                    <p>德意志银行警告："RSI接近超买区域，短期可能出现技术性回调，建议关注5180美元支撑。"</p>
+                `
+            },
+            11: {
+                title: '如何在投资组合中配置黄金？',
+                tag: '投资策略',
+                time: '2026年2月18日 15:20',
+                views: '1,432',
+                content: `
+                    <p>黄金作为传统的避险资产和通胀对冲工具，在现代投资组合中扮演着重要角色。本文将介绍不同投资方式的优缺点及配置建议。</p>
+                    
+                    <h2>黄金投资方式对比</h2>
+                    
+                    <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr style="background: var(--bg-secondary);">
+                            <th style="padding: 12px; border: 1px solid var(--border);">投资方式</th>
+                            <th style="padding: 12px; border: 1px solid var(--border);">优点</th>
+                            <th style="padding: 12px; border: 1px solid var(--border);">缺点</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">实物黄金</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">实物持有，无对手方风险</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">保管成本高，流动性差</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">黄金ETF</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">交易便捷，成本低</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">管理费用，信托结构风险</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">黄金期货</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">杠杆交易，流动性好</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">高风险，需要专业知识</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">黄金矿业股</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">杠杆效应，可能有股息</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">个股风险，与金价相关性不完美</td>
+                        </tr>
+                    </table>
+                    
+                    <h2>配置建议</h2>
+                    
+                    <p>根据投资目标和风险偏好，建议采取以下配置策略：</p>
+                    
+                    <ul>
+                        <li><strong>保守型投资者</strong> - 70%实物黄金/ETF + 30%矿业股</li>
+                        <li><strong>平衡型投资者</strong> - 50%ETF + 30%矿业股 + 20%期货</li>
+                        <li><strong>积极型投资者</strong> - 40%ETF + 40%矿业股 + 20%期权策略</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>配置时机：</strong>建议采取定投策略，分批建仓，避免单笔大额投入带来的择时风险。</p>
+                    </div>
+                `
+            },
+            12: {
+                title: '美联储主席暗示年内或降息两次',
+                tag: '美联储',
+                time: '2026年2月17日 09:00',
+                views: '2,876',
+                content: `
+                    <p>美联储主席在国会听证会上释放鸽派信号，暗示如果通胀继续回落，年内可能降息两次。消息公布后，黄金价格上涨至5230美元附近。</p>
+                    
+                    <h2>听证会要点</h2>
+                    
+                    <p>美联储主席主要表态包括：</p>
+                    
+                    <ul>
+                        <li>"通胀正朝着2%目标迈进，我们对这一进展感到鼓舞"</li>
+                        <li>"如果经济大致按预期发展，今年晚些时候降低政策限制程度可能是合适的"</li>
+                        <li>"我们将逐次会议做出决定，保持数据依赖"</li>
+                        <li>"过早降息的风险已降低，但需保持耐心"</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>市场解读：</strong>利率期货市场显示，6月降息概率从50%升至75%，全年预期降息幅度从50个基点升至65个基点。</p>
+                    </div>
+                    
+                    <h2>对黄金的影响</h2>
+                    
+                    <p>美联储降息预期升温对黄金市场产生多重利好：</p>
+                    
+                    <ol>
+                        <li><strong>机会成本下降</strong> - 无息资产黄金的持有成本降低</li>
+                        <li><strong>美元承压</strong> - 降息预期导致美元指数下跌0.5%</li>
+                        <li><strong>实际利率下行</strong> - TIPS收益率下降利好黄金</li>
+                        <li><strong>风险偏好提升</strong> - 资金流入大宗商品和贵金属</li>
+                    </ol>
+                    
+                    <h2>机构观点</h2>
+                    
+                    <p>摩根大通表示："如果美联储在6月开始降息，黄金价格有望在年底挑战5500美元。"</p>
+                    
+                    <p>贝莱德策略师认为："降息周期中的黄金表现通常优于其他资产类别，建议增加配置。"</p>
+                `
+            },
+            13: {
+                title: '印度黄金进口量创五年新高',
+                tag: '黄金市场',
+                time: '2026年2月16日 14:00',
+                views: '1,567',
+                content: `
+                    <p>印度商务部数据显示，2026年1月黄金进口量达到85吨，同比增长42%，创五年来同期新高。强劲的节日需求和婚礼季节推动了黄金消费。</p>
+                    
+                    <h2>进口数据详情</h2>
+                    
+                    <p>印度黄金进口月度数据：</p>
+                    
+                    <ul>
+                        <li><strong>1月进口量</strong> - 85吨（同比+42%，环比+25%）</li>
+                        <li><strong>进口金额</strong> - 约45亿美元</li>
+                        <li><strong>主要来源</strong> - 瑞士（45%）、阿联酋（30%）、南非（15%）</li>
+                        <li><strong>进口关税</strong> - 仍维持在12.5%的高位</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>需求构成：</strong>珠宝消费占65%，投资需求占30%，工业用金占5%。</p>
+                    </div>
+                    
+                    <h2>需求驱动因素</h2>
+                    
+                    <p>印度黄金需求强劲的主要驱动因素：</p>
+                    
+                    <ol>
+                        <li><strong>婚礼季节</strong> - 1-3月是传统婚礼高峰期</li>
+                        <li><strong>节日需求</strong> -  makar Sankranti等节日推动购买</li>
+                        <li><strong>投资需求</strong> - 股市波动促使资金流向黄金</li>
+                        <li><strong>汇率因素</strong> - 卢比相对稳定降低进口成本</li>
+                    </ol>
+                    
+                    <h2>对全球市场的影响</h2>
+                    
+                    <p>作为全球最大的黄金消费国之一，印度需求的回升对全球黄金市场构成支撑。世界黄金协会预计，2026年印度黄金需求将在800-850吨之间。</p>
+                `
+            },
+            14: {
+                title: '全球债务水平创新高，黄金成避风港',
+                tag: '宏观经济',
+                time: '2026年2月15日 11:30',
+                views: '2,234',
+                content: `
+                    <p>国际金融协会（IIF）报告显示，2025年全球债务总额达到创纪录的318万亿美元，相当于全球GDP的330%。高企的债务水平增强了黄金作为避险资产的吸引力。</p>
+                    
+                    <h2>全球债务概览</h2>
+                    
+                    <p>全球债务结构分析：</p>
+                    
+                    <ul>
+                        <li><strong>政府债务</strong> - 85万亿美元，占比27%</li>
+                        <li><strong>企业债务</strong> - 95万亿美元，占比30%</li>
+                        <li><strong>家庭债务</strong> - 60万亿美元，占比19%</li>
+                        <li><strong>金融机构</strong> - 78万亿美元，占比24%</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>债务增速：</strong>2025年全球债务增加15万亿美元，增速为2020年以来最快。</p>
+                    </div>
+                    
+                    <h2>债务风险分析</h2>
+                    
+                    <p>高债务水平带来的潜在风险：</p>
+                    
+                    <ol>
+                        <li><strong>利率风险</strong> - 高利率环境增加债务偿还压力</li>
+                        <li><strong>再融资风险</strong> - 大规模债务到期需要滚动融资</li>
+                        <li><strong>财政空间受限</strong> - 政府应对危机能力减弱</li>
+                        <li><strong>货币贬值压力</strong> - 可能通过通胀稀释债务</li>
+                    </ol>
+                    
+                    <h2>黄金避险价值</h2>
+                    
+                    <p>桥水基金创始人达里奥表示："在债务超级周期和货币贬值的背景下，黄金是保护购买力的最佳工具之一。"</p>
+                    
+                    <p>历史数据显示，在全球债务水平快速上升时期，黄金的年均回报率通常超过其他大类资产。</p>
+                `
+            },
+            15: {
+                title: '黄金vs比特币：哪种资产更适合避险？',
+                tag: '投资策略',
+                time: '2026年2月14日 16:00',
+                views: '3,124',
+                content: `
+                    <p>随着比特币现货ETF的推出和加密货币市场的成熟，"数字黄金"与实物黄金的竞争成为投资界热议话题。两者各有优劣，适合不同的投资需求。</p>
+                    
+                    <h2>黄金vs比特币对比</h2>
+                    
+                    <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr style="background: var(--bg-secondary);">
+                            <th style="padding: 12px; border: 1px solid var(--border);">对比维度</th>
+                            <th style="padding: 12px; border: 1px solid var(--border);">黄金</th>
+                            <th style="padding: 12px; border: 1px solid var(--border);">比特币</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">历史</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">数千年货币史</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">2009年诞生，15年历史</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">波动性</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">年化波动率约15%</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">年化波动率约60%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">央行认可度</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">全球央行储备资产</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">萨尔瓦多等少数国家认可</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">供应机制</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">每年新增约1-2%</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">固定2100万枚，减半机制</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid var(--border);">相关性</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">与股票低相关</td>
+                            <td style="padding: 12px; border: 1px solid var(--border);">与科技股相关性较高</td>
+                        </tr>
+                    </table>
+                    
+                    <h2>避险能力测试</h2>
+                    
+                    <p>在近期市场波动中两者的表现：</p>
+                    
+                    <ul>
+                        <li><strong>股市下跌10%</strong> - 黄金上涨2%，比特币下跌8%</li>
+                        <li><strong>地缘冲突升级</strong> - 黄金上涨3%，比特币下跌5%</li>
+                        <li><strong>通胀超预期</strong> - 黄金上涨4%，比特币上涨6%</li>
+                        <li><strong>美元走强</strong> - 黄金下跌2%，比特币下跌12%</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>结论：</strong>在传统避险情境下，黄金表现更稳定；在高通胀环境下，比特币可能提供更高回报，但伴随更大波动。</p>
+                    </div>
+                    
+                    <h2>配置建议</h2>
+                    
+                    <p>摩根士丹利建议："对于寻求避险的投资者，黄金仍是最可靠的选择。对于风险承受能力较高、投资期限较长的投资者，可以小比例配置比特币（不超过组合的2%）。"</p>
+                `
+            }
+        };
+        
+        // 获取URL参数
+        function getUrlParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+        
+        // 加载新闻
+        function loadNews() {
+            const newsId = getUrlParam('id') || '1';
+            const news = newsData[newsId];
+            
+            if (!news) {
+                document.getElementById('newsContent').innerHTML = '<p>新闻不存在或已删除。</p>';
+                return;
+            }
+            
+            // 更新页面
+            document.title = news.title + ' - GoldPulse';
+            document.getElementById('breadcrumbTag').textContent = news.tag;
+            document.getElementById('newsTag').textContent = news.tag;
+            document.getElementById('newsTitle').textContent = news.title;
+            document.getElementById('newsTime').textContent = news.time;
+            document.getElementById('newsViews').textContent = news.views + ' 阅读';
+            document.getElementById('newsContent').innerHTML = news.content;
+            
+            // 加载相关新闻
+            loadRelatedNews(newsId);
+        }
+        
+        // 加载相关新闻
+        function loadRelatedNews(currentId) {
+            const relatedIds = Object.keys(newsData).filter(id => id !== currentId).slice(0, 2);
+            const container = document.getElementById('relatedList');
+            
+            container.innerHTML = relatedIds.map(id => {
+                const news = newsData[id];
+                return `
+                    <a href="news-detail.html?id=${id}" class="related-item">
+                        <div class="related-thumb">${news.tag[0]}</div>
+                        <div class="related-content">
+                            <h4>${news.title}</h4>
+                            <span>${news.time} · ${news.views} 阅读</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+        
+        // 操作功能
+        function shareNews() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('newsTitle').textContent,
+                    url: window.location.href
+                });
+            } else {
+                // 复制链接
+                navigator.clipboard.writeText(window.location.href);
+                alert('链接已复制到剪贴板');
+            }
+        }
+        
+        function collectNews() {
+            alert('已添加到收藏夹');
+        }
+        
+        function printNews() {
+            window.print();
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', loadNews);
+    </script>
+</body>
+</html>

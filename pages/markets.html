@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<!-- GoldPulse v2.0 Updated -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行情中心 - GoldPulse v2.0</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="../js/stocks.js"></script>
+    
+    <!-- v2 CSS System -->
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           Navigation v2
+           ============================================ */
+        .navbar-v2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: var(--z-nav);
+            transition: all var(--duration-normal);
+        }
+        
+        .navbar-v2.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-container {
+            max-width: var(--container-xl);
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font: var(--text-h5);
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: opacity var(--duration-fast);
+        }
+        
+        .nav-logo:hover { opacity: 0.8; }
+        
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .nav-link {
+            padding: var(--space-2) var(--space-4);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link.active {
+            color: var(--gold-primary);
+            background: var(--gold-10);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        /* ============================================
+           Hero Price Section v2 - 动态背景
+           ============================================ */
+        .hero-price-section {
+            padding-top: var(--nav-height);
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--gradient-bg-hero);
+        }
+        
+        .hero-bg-v2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('../assets/images/v2/tech-globe-v2.jpg') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .hero-overlay-v2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.8) 100%),
+                linear-gradient(180deg, rgba(10,10,15,0.9) 0%, transparent 50%, rgba(10,10,15,0.95) 100%);
+            z-index: 1;
+        }
+        
+        .hero-glow-v2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 2;
+            animation: glowBreathe 6s ease-in-out infinite;
+        }
+        
+        @keyframes glowBreathe {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        .hero-price-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: var(--space-12) var(--space-6);
+        }
+        
+        /* 市场选择器 */
+        .market-selector {
+            display: flex;
+            gap: var(--space-2);
+            margin-bottom: var(--space-10);
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            padding: var(--space-2);
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .market-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .market-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--gold-10);
+            border-radius: var(--radius-full);
+            transform: scale(0);
+            transition: transform 0.3s var(--ease-spring);
+        }
+        
+        .market-btn.active { 
+            color: var(--gold-primary); 
+            box-shadow: var(--glow-gold-sm);
+        }
+        .market-btn.active::before { transform: scale(1); }
+        .market-btn span { position: relative; z-index: 1; }
+        .market-btn:hover:not(.active) { color: var(--text-primary); transform: translateY(-1px); }
+        
+        /* 巨型价格 - 光晕效果 */
+        .giant-price {
+            font-size: 120px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-4);
+            text-shadow: 0 0 80px rgba(255,215,0,0.3);
+            transition: all 0.5s var(--ease-spring);
+            filter: drop-shadow(0 0 40px rgba(255,215,0,0.2));
+        }
+        
+        .giant-price.updating { 
+            transform: scale(1.02); 
+            filter: drop-shadow(0 0 60px rgba(255,215,0,0.5));
+        }
+        
+        .price-change {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-6);
+            background: var(--up-10);
+            border-radius: var(--radius-full);
+            font-size: 1.25rem;
+            color: var(--up);
+            margin-bottom: var(--space-10);
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(50, 215, 75, 0.1);
+        }
+        
+        .price-change.down { 
+            background: var(--down-10); 
+            color: var(--down);
+            box-shadow: 0 0 20px rgba(255, 69, 58, 0.1);
+        }
+        
+        .price-meta {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: center;
+        }
+        
+        .meta-item {
+            text-align: center;
+            padding: var(--space-4) var(--space-6);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-xl);
+            transition: all 0.3s var(--ease-spring);
+            min-width: 120px;
+        }
+        
+        .meta-item:hover { 
+            transform: translateY(-4px); 
+            border-color: var(--border-gold);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--text-quaternary);
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .meta-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            color: var(--gold-primary);
+            transition: all 0.3s;
+        }
+        
+        /* ============================================
+           Main Content
+           ============================================ */
+        .main-content {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-6);
+        }
+        
+        /* ============================================
+           Bento Grid v2 - 玻璃拟态卡片
+           ============================================ */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-6);
+            margin-bottom: var(--space-10);
+        }
+        
+        .bento-card {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            transition: all 0.4s var(--ease-spring);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 悬浮光效 */
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 215, 0, 0.06),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--duration-normal);
+            pointer-events: none;
+            border-radius: var(--radius-2xl);
+        }
+        
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+        
+        .bento-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,215,0,0.2);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .bento-card.large { grid-column: span 2; grid-row: span 2; }
+        
+        .bento-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-5);
+        }
+        
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 24px;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(255,215,0,0.1);
+        }
+        
+        .bento-card:hover .bento-icon { 
+            transform: scale(1.1); 
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.08));
+        }
+        
+        .bento-title { 
+            font-size: 1.125rem; 
+            font-weight: 600; 
+            color: var(--text-primary);
+        }
+        
+        .bento-subtitle { 
+            font-size: 0.75rem; 
+            color: var(--text-quaternary); 
+        }
+        
+        .bento-price { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            font-family: var(--font-mono); 
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .bento-change { 
+            font-size: 0.875rem; 
+            display: flex;
+            align-items: center;
+            gap: 4px; 
+        }
+        
+        .bento-change.up { color: var(--up); }
+        .bento-change.down { color: var(--down); }
+        
+        /* ============================================
+           Chart Section v2 - 金色主题
+           ============================================ */
+        .chart-section {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-10);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-section:hover { 
+            border-color: rgba(255,215,0,0.1); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chart-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: var(--space-6); 
+            flex-wrap: wrap; 
+            gap: var(--space-4); 
+        }
+        
+        .chart-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: var(--space-3);
+            color: var(--text-primary);
+        }
+        
+        .chart-controls { 
+            display: flex; 
+            gap: var(--space-4); 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        
+        .time-selector { 
+            display: flex; 
+            gap: 4px; 
+            background: rgba(255,255,255,0.05); 
+            padding: 4px; 
+            border-radius: var(--radius-md); 
+        }
+        
+        .time-btn { 
+            padding: 8px 16px; 
+            background: transparent; 
+            border: none; 
+            color: var(--text-tertiary); 
+            font-size: 0.875rem; 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            transition: all 0.3s var(--ease-spring); 
+        }
+        
+        .time-btn:hover { color: var(--text-primary); transform: translateY(-1px); }
+        
+        .time-btn.active { 
+            background: var(--gold-primary); 
+            color: #000; 
+            box-shadow: 0 4px 15px var(--gold-30);
+            font-weight: 600;
+        }
+        
+        .indicator-selector { 
+            display: flex; 
+            gap: var(--space-2); 
+            align-items: center; 
+        }
+        
+        .indicator-btn { 
+            padding: 6px 12px; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: var(--text-tertiary); 
+            font-size: 0.75rem; 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+        }
+        
+        .indicator-btn:hover { 
+            border-color: rgba(255,215,0,0.3); 
+            color: var(--text-primary); 
+        }
+        
+        .indicator-btn.active { 
+            background: var(--gold-10); 
+            border-color: var(--gold-20); 
+            color: var(--gold-primary); 
+        }
+        
+        .chart-container { 
+            height: 500px; 
+            position: relative; 
+            border-radius: var(--radius-lg); 
+            overflow: hidden; 
+        }
+        
+        #mainChart { width: 100%; height: 100%; }
+        
+        /* 数据面板 */
+        .data-panel { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: var(--space-4); 
+            margin-top: var(--space-6); 
+            padding-top: var(--space-6); 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        
+        .data-item { 
+            text-align: center; 
+            padding: var(--space-4); 
+            background: rgba(255,255,255,0.02); 
+            border-radius: var(--radius-lg); 
+            transition: all 0.3s var(--ease-spring);
+            border: 1px solid transparent;
+        }
+        
+        .data-item:hover { 
+            background: rgba(255,255,255,0.04); 
+            transform: translateY(-4px);
+            border-color: rgba(255,215,0,0.1);
+        }
+        
+        .data-label { 
+            font-size: 0.75rem; 
+            color: var(--text-quaternary); 
+            margin-bottom: var(--space-2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-value { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+            font-family: var(--font-mono); 
+            color: var(--gold-primary); 
+        }
+        
+        /* ============================================
+           Alert Panel v2 - 发光边框
+           ============================================ */
+        .alert-panel { 
+            background: rgba(255,255,255,0.02); 
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: var(--radius-2xl); 
+            padding: var(--space-8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .alert-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent, rgba(255,215,0,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .alert-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: var(--space-6); 
+        }
+        
+        .alert-title { 
+            font-size: 1.25rem; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: var(--space-3);
+            color: var(--text-primary);
+        }
+        
+        .btn-add-alert {
+            padding: var(--space-3) var(--space-5);
+            background: var(--gold-10);
+            border: 1px solid var(--gold-20);
+            color: var(--gold-primary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all 0.3s var(--ease-spring);
+            font-size: 0.875rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-add-alert:hover { 
+            background: var(--gold-20); 
+            transform: translateY(-2px); 
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .btn-add-alert:active { transform: translateY(0); }
+        .btn-add-alert.adding { animation: pulseBtn 0.6s ease; }
+        
+        @keyframes pulseBtn { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(0.95); } 
+        }
+        
+        .alert-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: var(--space-3); 
+        }
+        
+        .alert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) var(--space-5);
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s var(--ease-spring);
+            cursor: pointer;
+        }
+        
+        .alert-item:hover { 
+            background: rgba(255,255,255,0.05); 
+            border-color: rgba(255,215,0,0.15); 
+            transform: translateX(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .alert-info h4 { 
+            font-size: 1rem; 
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        
+        .alert-info p { 
+            font-size: 0.875rem; 
+            color: var(--text-quaternary); 
+        }
+        
+        .alert-status { 
+            padding: var(--space-1) var(--space-3);
+            background: var(--up-10);
+            color: var(--up);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .alert-item:hover .alert-status { 
+            background: var(--up-20);
+            box-shadow: 0 0 20px var(--up-glow);
+        }
+        
+        /* ============================================
+           Stock Section v2
+           ============================================ */
+        .stock-section {
+            background: linear-gradient(180deg, rgba(20,20,25,0.8) 0%, rgba(10,10,15,0.9) 100%),
+                        url('../assets/images/v2/data-center.jpg') center/cover no-repeat;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-top: var(--space-10);
+        }
+        
+        .stock-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            color: var(--text-primary);
+        }
+        
+        .stock-section h2 i {
+            color: var(--gold-primary);
+        }
+        
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) var(--space-4);
+            background: rgba(255,255,255,0.02);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s var(--ease-spring);
+            cursor: pointer;
+        }
+        
+        .stock-item:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,215,0,0.1);
+            transform: translateX(4px);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: var(--space-4) var(--space-6);
+            background: rgba(20,20,25,0.95);
+            border: 1px solid var(--gold-20);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            box-shadow: var(--shadow-xl), var(--glow-gold-sm);
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.4s var(--ease-spring);
+            backdrop-filter: blur(10px);
+        }
+        
+        .toast.show { 
+            transform: translateX(-50%) translateY(0); 
+            opacity: 1; 
+        }
+        
+        .toast-icon { 
+            width: 32px; 
+            height: 32px; 
+            background: var(--gold-10); 
+            border-radius: var(--radius-md); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--gold-primary); 
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay { 
+            position: absolute; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(5px);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 100; 
+            opacity: 0; 
+            pointer-events: none; 
+            transition: opacity 0.3s; 
+        }
+        
+        .loading-overlay.show { opacity: 1; pointer-events: all; }
+        
+        .loading-spinner { 
+            width: 48px; 
+            height: 48px; 
+            border: 3px solid var(--gold-10); 
+            border-top-color: var(--gold-primary); 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+            box-shadow: 0 0 20px var(--gold-20);
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Cursor Data */
+        .cursor-data { 
+            position: absolute; 
+            top: var(--space-4); 
+            right: var(--space-4); 
+            background: rgba(10,10,15,0.95); 
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold-20); 
+            border-radius: var(--radius-lg); 
+            padding: var(--space-4); 
+            min-width: 180px; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            pointer-events: none;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .cursor-data.show { opacity: 1; }
+        
+        .cursor-data-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: var(--space-2); 
+            font-size: 0.875rem; 
+        }
+        
+        .cursor-data-row:last-child { margin-bottom: 0; }
+        
+        .cursor-data-label { color: var(--text-quaternary); }
+        
+        .cursor-data-value { 
+            font-family: var(--font-mono); 
+            font-weight: 600; 
+        }
+        
+        .cursor-data-value.up { color: var(--up); }
+        .cursor-data-value.down { color: var(--down); }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .giant-price { font-size: 80px; }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-card.large { grid-column: span 2; }
+            .data-panel { grid-template-columns: repeat(2, 1fr); }
+            .chart-controls { width: 100%; justify-content: center; }
+            .price-meta { flex-wrap: wrap; gap: var(--space-4); }
+        }
+        
+        @media (max-width: 640px) {
+            .giant-price { font-size: 56px; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card.large { grid-column: span 1; }
+            .data-panel { grid-template-columns: 1fr; }
+            .chart-container { height: 350px; }
+            .market-selector { flex-wrap: wrap; justify-content: center; }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar-v2">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <div class="nav-logo-icon"><i class="ph-fill ph-coin"></i></div>
+                <span>GoldPulse</span>
+            </a>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="markets.html" class="nav-link active">行情</a>
+                <a href="analysis.html" class="nav-link">分析</a>
+                <a href="news.html" class="nav-link">资讯</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-secondary" onclick="location.href='login.html'">登录</button>
+                <button class="btn btn-primary" onclick="location.href='login.html?action=register'">注册</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-price-section">
+        <div class="hero-bg-v2"></div>
+        <div class="hero-overlay-v2"></div>
+        <div class="hero-glow-v2"></div>
+        
+        <div class="hero-price-content">
+            <div class="market-selector">
+                <button class="market-btn active" onclick="switchMarket('gold', this)"><i class="ph-fill ph-coin"></i> <span>黄金</span></button>
+                <button class="market-btn" onclick="switchMarket('hsi', this)"><i class="ph ph-buildings"></i> <span>恒生</span></button>
+                <button class="market-btn" onclick="switchMarket('nasdaq', this)"><i class="ph ph-chart-line-up"></i> <span>纳指</span></button>
+                <button class="market-btn" onclick="switchMarket('sp500', this)"><i class="ph ph-chart-bar"></i> <span>标普</span></button>
+                <button class="market-btn" onclick="switchMarket('sse', this)"><i class="ph ph-buildings"></i> <span>上证</span></button>
+            </div>
+            
+            <div class="giant-price" id="mainPrice">$2,945.20</div>
+            <div class="price-change" id="mainChange"><i class="ph ph-arrow-up-right"></i><span>+0.37% +$10.85</span></div>
+            
+            <div class="price-meta">
+                <div class="meta-item"><div class="meta-label">今日最高</div><div class="meta-value" id="highPrice">$2,958.40</div></div>
+                <div class="meta-item"><div class="meta-label">今日最低</div><div class="meta-value" id="lowPrice">$2,928.10</div></div>
+                <div class="meta-item"><div class="meta-label">开盘价</div><div class="meta-value" id="openPrice">$2,934.35</div></div>
+                <div class="meta-item"><div class="meta-label">24h成交量</div><div class="meta-value" id="volume">$28.5B</div></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="bento-grid">
+            <div class="bento-card large card-spotlight" onclick="focusOnChart()">
+                <div class="bento-header">
+                    <div class="bento-icon"><i class="ph ph-chart-line"></i></div>
+                    <div><div class="bento-title">价格走势</div><div class="bento-subtitle">点击查看详细图表</div></div>
+                </div>
+                <div id="miniChart" style="width:100%;height:200px;"></div>
+            </div>
+            
+            <div class="bento-card card-spotlight" onclick="switchMarket('gold', document.querySelector('.market-btn'))">
+                <div class="bento-header"><div class="bento-icon"><i class="ph-fill ph-coin"></i></div><div><div class="bento-title">黄金</div><div class="bento-subtitle">XAU/USD</div></div></div>
+                <div class="bento-price" id="bentoGold">$2,945</div>
+                <div class="bento-change up" id="bentoGoldChange"><i class="ph ph-arrow-up-right"></i> +0.37%</div>
+            </div>
+            
+            <div class="bento-card card-spotlight" onclick="switchMarket('hsi', document.querySelectorAll('.market-btn')[1])">
+                <div class="bento-header"><div class="bento-icon"><i class="ph ph-buildings"></i></div><div><div class="bento-title">恒生指数</div><div class="bento-subtitle">HSI</div></div></div>
+                <div class="bento-price" id="bentoHsi">19,739</div>
+                <div class="bento-change up" id="bentoHsiChange"><i class="ph ph-arrow-up-right"></i> +0.56%</div>
+            </div>
+            
+            <div class="bento-card card-spotlight" onclick="switchMarket('nasdaq', document.querySelectorAll('.market-btn')[2])">
+                <div class="bento-header"><div class="bento-icon"><i class="ph ph-chart-line-up"></i></div><div><div class="bento-title">纳斯达克</div><div class="bento-subtitle">NASDAQ</div></div></div>
+                <div class="bento-price" id="bentoNasdaq">19,864</div>
+                <div class="bento-change up" id="bentoNasdaqChange"><i class="ph ph-arrow-up-right"></i> +1.04%</div>
+            </div>
+            
+            <div class="bento-card card-spotlight" onclick="switchMarket('sp500', document.querySelectorAll('.market-btn')[3])">
+                <div class="bento-header"><div class="bento-icon"><i class="ph ph-chart-bar"></i></div><div><div class="bento-title">标普500</div><div class="bento-subtitle">S&P500</div></div></div>
+                <div class="bento-price" id="bentoSp500">5,892</div>
+                <div class="bento-change up" id="bentoSp500Change"><i class="ph ph-arrow-up-right"></i> +0.78%</div>
+            </div>
+        </div>
+        
+        <div class="chart-section" id="mainChartSection">
+            <div class="chart-header">
+                <div class="chart-title"><i class="ph ph-chart-line-up" style="color: var(--gold-primary);"></i><span id="chartTitle">黄金价格走势图</span></div>
+                <div class="chart-controls">
+                    <div class="indicator-selector">
+                        <button class="indicator-btn active" onclick="toggleIndicator('ma', this)"><i class="ph ph-trend-up"></i> MA均线</button>
+                        <button class="indicator-btn" onclick="toggleIndicator('volume', this)"><i class="ph ph-chart-bar"></i> 成交量</button>
+                    </div>
+                    <div class="time-selector">
+                        <button class="time-btn" onclick="switchTimeframe('1h', this)">1H</button>
+                        <button class="time-btn active" onclick="switchTimeframe('1d', this)">1D</button>
+                        <button class="time-btn" onclick="switchTimeframe('1w', this)">1W</button>
+                        <button class="time-btn" onclick="switchTimeframe('1m', this)">1M</button>
+                        <button class="time-btn" onclick="switchTimeframe('1y', this)">1Y</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div id="mainChart"></div>
+                <div class="loading-overlay" id="chartLoading"><div class="loading-spinner"></div></div>
+                <div class="cursor-data" id="cursorData">
+                    <div class="cursor-data-row"><span class="cursor-data-label">时间</span><span class="cursor-data-value" id="cursorTime">--</span></div>
+                    <div class="cursor-data-row"><span class="cursor-data-label">开盘</span><span class="cursor-data-value" id="cursorOpen">--</span></div>
+                    <div class="cursor-data-row"><span class="cursor-data-label">最高</span><span class="cursor-data-value up" id="cursorHigh">--</span></div>
+                    <div class="cursor-data-row"><span class="cursor-data-label">最低</span><span class="cursor-data-value down" id="cursorLow">--</span></div>
+                    <div class="cursor-data-row"><span class="cursor-data-label">收盘</span><span class="cursor-data-value" id="cursorClose">--</span></div>
+                    <div class="cursor-data-row"><span class="cursor-data-label">成交量</span><span class="cursor-data-value" id="cursorVolume">--</span></div>
+                </div>
+            </div>
+            <div class="data-panel">
+                <div class="data-item"><div class="data-label">MA5</div><div class="data-value" id="ma5Value">--</div></div>
+                <div class="data-item"><div class="data-label">MA10</div><div class="data-value" id="ma10Value">--</div></div>
+                <div class="data-item"><div class="data-label">MA20</div><div class="data-value" id="ma20Value">--</div></div>
+                <div class="data-item"><div class="data-label">MA60</div><div class="data-value" id="ma60Value">--</div></div>
+            </div>
+        </div>
+        
+        <div class="alert-panel" style="margin-bottom: 40px;">
+            <div class="alert-header">
+                <div class="alert-title"><i class="ph ph-bell" style="color: var(--gold-primary);"></i>价格提醒</div>
+                <button class="btn-add-alert" onclick="addAlert()"><i class="ph ph-plus"></i>添加提醒</button>
+            </div>
+            <div class="alert-list" id="alertList">
+                <div class="alert-item"><div class="alert-info"><h4>黄金高于 $3,000</h4><p>创建时间: 2026-02-25 14:30</p></div><span class="alert-status">监控中</span></div>
+                <div class="alert-item"><div class="alert-info"><h4>黄金低于 $2,800</h4><p>创建时间: 2026-02-24 09:15</p></div><span class="alert-status">监控中</span></div>
+            </div>
+        </div>
+        
+        <!-- 全球股市 -->
+        <div class="stock-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+                <h2><i class="ph ph-globe"></i>全球股市</h2>
+                <div style="display: flex; gap: var(--space-2); align-items: center;">
+                    <span id="lastUpdate" style="font-size: 0.75rem; color: var(--text-quaternary);">更新于: --</span>
+                    <button onclick="refreshStocks()" style="padding: var(--space-2) var(--space-4); background: var(--gold-10); border: 1px solid var(--gold-20); border-radius: var(--radius-md); color: var(--gold-primary); cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.875rem; transition: all 0.3s;">
+                        <i class="ph ph-arrows-clockwise"></i>刷新
+                    </button>
+                </div>
+            </div>
+            <div id="stockCategories"></div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"><div class="toast-icon"><i class="ph-fill ph-check-circle"></i></div><span id="toastMessage">操作成功</span></div>
+
+    <script>
+        // 初始化光晕追踪效果
+        function initSpotlightEffect() {
+            const cards = document.querySelectorAll('.card-spotlight');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar-v2');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // 原有功能代码...
+        const marketData = {
+            gold: { name: '黄金', price: 2945.20, change: 0.37, symbol: 'XAU/USD', open: 2934.35, high: 2958.40, low: 2928.10, volume: '$28.5B' },
+            hsi: { name: '恒生指数', price: 19738.88, change: 0.56, symbol: 'HSI', open: 19629.06, high: 19850.25, low: 19620.40, volume: '$125.3B' },
+            nasdaq: { name: '纳斯达克', price: 19863.68, change: 1.04, symbol: 'NASDAQ', open: 19659.23, high: 19950.30, low: 19659.23, volume: '$85.2B' },
+            sp500: { name: '标普500', price: 5892.35, change: 0.78, symbol: 'S&P500', open: 5846.70, high: 5912.40, low: 5846.70, volume: '$65.8B' },
+            sse: { name: '上证指数', price: 3350.25, change: 0.32, symbol: 'SSE', open: 3338.00, high: 3365.00, low: 3330.00, volume: '$420.5B' }
+        };
+        
+        let currentMarket = 'gold', currentTimeframe = '1d', showMA = true, showVolume = false;
+        let mainChart = null, miniChart = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initMainChart();
+            initMiniChart();
+            updateMAValues();
+            initSpotlightEffect();
+        });
+        
+        function switchMarket(market, btn) {
+            if (currentMarket === market) return;
+            currentMarket = market;
+            const data = marketData[market];
+            
+            document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const priceEl = document.getElementById('mainPrice');
+            priceEl.classList.add('updating');
+            setTimeout(() => priceEl.classList.remove('updating'), 500);
+            
+            const currency = market === 'gold' ? '$' : '';
+            priceEl.textContent = currency + data.price.toLocaleString(undefined, {minimumFractionDigits: 2});
+            
+            const isUp = data.change >= 0;
+            const changeEl = document.getElementById('mainChange');
+            changeEl.innerHTML = `<i class="ph ph-arrow-${isUp ? 'up' : 'down'}-right"></i><span>${isUp ? '+' : ''}${data.change}%</span>`;
+            changeEl.className = 'price-change ' + (isUp ? '' : 'down');
+            
+            document.getElementById('highPrice').textContent = currency + data.high.toLocaleString();
+            document.getElementById('lowPrice').textContent = currency + data.low.toLocaleString();
+            document.getElementById('openPrice').textContent = currency + data.open.toLocaleString();
+            document.getElementById('volume').textContent = data.volume;
+            document.getElementById('chartTitle').textContent = data.name + '价格走势图';
+            
+            showLoading();
+            setTimeout(() => { updateChartData(); hideLoading(); }, 500);
+            showToast(`已切换到 ${data.name}`);
+        }
+        
+        function switchTimeframe(timeframe, btn) {
+            currentTimeframe = timeframe;
+            document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            showLoading();
+            setTimeout(() => { updateChartData(); hideLoading(); }, 400);
+        }
+        
+        function toggleIndicator(type, btn) {
+            btn.classList.toggle('active');
+            if (type === 'ma') showMA = btn.classList.contains('active');
+            else if (type === 'volume') showVolume = btn.classList.contains('active');
+            updateChartData();
+        }
+        
+        function generateChartData(timeframe, market) {
+            const basePrice = marketData[market].price;
+            const data = [], volumes = [];
+            let points, interval;
+            const now = new Date();
+            
+            switch(timeframe) {
+                case '1h': points = 60; interval = 1; break;
+                case '1d': points = 48; interval = 30; break;
+                case '1w': points = 42; interval = 240; break;
+                case '1m': points = 30; interval = 24 * 60; break;
+                case '1y': points = 52; interval = 7 * 24 * 60; break;
+                default: points = 48; interval = 30;
+            }
+            
+            const startTime = new Date(now.getTime() - points * interval * 60000);
+            let currentPrice = basePrice * 0.98;
+            
+            for (let i = 0; i < points; i++) {
+                const time = new Date(startTime.getTime() + i * interval * 60000);
+                const volatility = 0.008, trend = Math.sin(i / 10) * 0.005;
+                const open = currentPrice;
+                const change = (Math.random() - 0.5) * volatility + trend;
+                const close = open * (1 + change);
+                const high = Math.max(open, close) * (1 + Math.random() * 0.003);
+                const low = Math.min(open, close) * (1 - Math.random() * 0.003);
+                const volume = Math.floor(Math.random() * 10000 + 5000);
+                
+                data.push([time, open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)]);
+                volumes.push(volume);
+                currentPrice = close;
+            }
+            return { data, volumes };
+        }
+        
+        function calculateMA(data, period) {
+            const ma = [];
+            for (let i = 0; i < data.length; i++) {
+                if (i < period - 1) { ma.push('-'); continue; }
+                let sum = 0;
+                for (let j = 0; j < period; j++) sum += parseFloat(data[i - j][2]);
+                ma.push((sum / period).toFixed(2));
+            }
+            return ma;
+        }
+        
+        function initMainChart() {
+            const chartDom = document.getElementById('mainChart');
+            mainChart = echarts.init(chartDom, 'dark');
+            updateChartData();
+            
+            window.addEventListener('resize', () => { mainChart.resize(); if (miniChart) miniChart.resize(); });
+            
+            mainChart.on('click', function(params) {
+                if (params.componentType === 'series') showToast(`选中时间点: ${params.name}`);
+            });
+            
+            mainChart.on('updateAxisPointer', function(event) {
+                const xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) updateCursorData(xAxisInfo.value);
+            });
+        }
+        
+        function updateChartData() {
+            const { data, volumes } = generateChartData(currentTimeframe, currentMarket);
+            
+            const dates = data.map(item => {
+                const date = new Date(item[0]);
+                return (currentTimeframe === '1h' || currentTimeframe === '1d') 
+                    ? date.toLocaleTimeString('zh-CN', {hour: '2-digit', minute: '2-digit'})
+                    : date.toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'});
+            });
+            
+            const candleData = data.map(item => [item[1], item[2], item[3], item[4]]);
+            const ma5 = showMA ? calculateMA(data, 5) : [];
+            const ma10 = showMA ? calculateMA(data, 10) : [];
+            const ma20 = showMA ? calculateMA(data, 20) : [];
+            
+            const series = [{
+                name: 'K线', type: 'candlestick', data: candleData,
+                itemStyle: { color: '#32d74b', color0: '#ff453a', borderColor: '#32d74b', borderColor0: '#ff453a' },
+                emphasis: { itemStyle: { borderWidth: 2 } }
+            }];
+            
+            if (showMA) {
+                series.push(
+                    { name: 'MA5', type: 'line', data: ma5, smooth: true, lineStyle: { opacity: 0.8, width: 1, color: '#ffd700' }, symbol: 'none' },
+                    { name: 'MA10', type: 'line', data: ma10, smooth: true, lineStyle: { opacity: 0.8, width: 1, color: '#00d4aa' }, symbol: 'none' },
+                    { name: 'MA20', type: 'line', data: ma20, smooth: true, lineStyle: { opacity: 0.8, width: 1, color: '#ff6b6b' }, symbol: 'none' }
+                );
+            }
+            
+            if (showVolume) {
+                series.push({ name: '成交量', type: 'bar', xAxisIndex: 0, yAxisIndex: 1, data: volumes, itemStyle: { color: 'rgba(255, 215, 0, 0.3)' } });
+            }
+            
+            const option = {
+                backgroundColor: 'transparent',
+                animation: true, animationDuration: 500,
+                legend: { data: showMA ? ['K线', 'MA5', 'MA10', 'MA20'] : ['K线'], textStyle: { color: 'rgba(255,255,255,0.6)' }, top: 0 },
+                tooltip: {
+                    trigger: 'axis', axisPointer: { type: 'cross', lineStyle: { color: 'rgba(255,215,0,0.5)', width: 1, type: 'dashed' } },
+                    backgroundColor: 'rgba(0,0,0,0.9)', borderColor: 'rgba(255,215,0,0.3)', borderWidth: 1, textStyle: { color: '#fff' },
+                    formatter: function(params) {
+                        let html = `<div style="font-weight:600;margin-bottom:8px;">${params[0].name}</div>`;
+                        params.forEach(p => {
+                            if (p.seriesName === 'K线') {
+                                const d = p.data;
+                                html += `<div style="display:flex;justify-content:space-between;gap:20px;font-size:12px;"><span style="color:rgba(255,255,255,0.6)">开盘</span><span style="font-family:monospace">${d[1]}</span></div>`;
+                                html += `<div style="display:flex;justify-content:space-between;gap:20px;font-size:12px;"><span style="color:rgba(255,255,255,0.6)">收盘</span><span style="font-family:monospace;color:#ffd700">${d[2]}</span></div>`;
+                                html += `<div style="display:flex;justify-content:space-between;gap:20px;font-size:12px;"><span style="color:rgba(255,255,255,0.6)">最低</span><span style="font-family:monospace;color:#ff453a">${d[3]}</span></div>`;
+                                html += `<div style="display:flex;justify-content:space-between;gap:20px;font-size:12px;"><span style="color:rgba(255,255,255,0.6)">最高</span><span style="font-family:monospace;color:#32d74b">${d[4]}</span></div>`;
+                            } else {
+                                html += `<div style="display:flex;justify-content:space-between;gap:20px;font-size:12px;margin-top:4px;"><span style="color:${p.color}">${p.seriesName}</span><span style="font-family:monospace">${p.value}</span></div>`;
+                            }
+                        });
+                        return html;
+                    }
+                },
+                grid: [{ left: '3%', right: '3%', top: '15%', height: showVolume ? '55%' : '70%' }, { left: '3%', right: '3%', top: '75%', height: '15%' }],
+                xAxis: [
+                    { type: 'category', data: dates, scale: true, boundaryGap: false, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }, axisLabel: { color: 'rgba(255,255,255,0.5)' }, splitLine: { show: false } },
+                    { type: 'category', gridIndex: 1, data: dates, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }, axisLabel: { show: false } }
+                ],
+                yAxis: [
+                    { scale: true, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }, axisLabel: { color: 'rgba(255,255,255,0.5)', formatter: v => v.toFixed(0) }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)' } } },
+                    { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false } }
+                ],
+                dataZoom: [
+                    { type: 'inside', start: 0, end: 100 },
+                    { show: true, type: 'slider', top: '92%', start: 0, end: 100, height: 20, borderColor: 'rgba(255,255,255,0.1)', fillerColor: 'rgba(255,215,0,0.2)', handleStyle: { color: '#ffd700' }, textStyle: { color: 'rgba(255,255,255,0.5)' } }
+                ],
+                series: series
+            };
+            
+            mainChart.setOption(option, true);
+            
+            if (showMA && ma5.length > 0) {
+                const lastIdx = ma5.length - 1;
+                document.getElementById('ma5Value').textContent = parseFloat(ma5[lastIdx]).toFixed(2);
+                document.getElementById('ma10Value').textContent = parseFloat(ma10[lastIdx]).toFixed(2);
+                document.getElementById('ma20Value').textContent = parseFloat(ma20[lastIdx]).toFixed(2);
+                document.getElementById('ma60Value').textContent = (parseFloat(ma20[lastIdx]) * 0.98).toFixed(2);
+            }
+        }
+        
+        function initMiniChart() {
+            const chartDom = document.getElementById('miniChart');
+            miniChart = echarts.init(chartDom, 'dark');
+            const { data } = generateChartData('1d', 'gold');
+            const prices = data.map(item => item[2]);
+            const times = data.map((item, i) => i);
+            
+            miniChart.setOption({
+                backgroundColor: 'transparent',
+                grid: { left: 0, right: 0, top: 10, bottom: 10 },
+                xAxis: { type: 'category', data: times, show: false },
+                yAxis: { type: 'value', show: false, min: Math.min(...prices) * 0.998, max: Math.max(...prices) * 1.002 },
+                series: [{
+                    data: prices, type: 'line', smooth: true, symbol: 'none',
+                    lineStyle: { color: '#ffd700', width: 2 },
+                    areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,215,0,0.3)' }, { offset: 1, color: 'rgba(255,215,0,0)' }]) }
+                }]
+            });
+        }
+        
+        function updateCursorData(index) {
+            const cursorData = document.getElementById('cursorData');
+            const { data } = generateChartData(currentTimeframe, currentMarket);
+            
+            if (index >= 0 && index < data.length) {
+                const item = data[index];
+                const date = new Date(item[0]);
+                document.getElementById('cursorTime').textContent = date.toLocaleString('zh-CN', {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'});
+                document.getElementById('cursorOpen').textContent = parseFloat(item[1]).toFixed(2);
+                document.getElementById('cursorHigh').textContent = parseFloat(item[4]).toFixed(2);
+                document.getElementById('cursorLow').textContent = parseFloat(item[3]).toFixed(2);
+                document.getElementById('cursorClose').textContent = parseFloat(item[2]).toFixed(2);
+                document.getElementById('cursorVolume').textContent = Math.floor(Math.random() * 10000 + 5000).toLocaleString();
+                cursorData.classList.add('show');
+            }
+        }
+        
+        function updateMAValues() {
+            document.getElementById('ma5Value').textContent = '2945.20';
+            document.getElementById('ma10Value').textContent = '2938.45';
+            document.getElementById('ma20Value').textContent = '2929.80';
+            document.getElementById('ma60Value').textContent = '2895.30';
+        }
+        
+        function showLoading() { document.getElementById('chartLoading').classList.add('show'); }
+        function hideLoading() { document.getElementById('chartLoading').classList.remove('show'); }
+        
+        function addAlert() {
+            const btn = document.querySelector('.btn-add-alert');
+            btn.classList.add('adding');
+            
+            setTimeout(() => {
+                btn.classList.remove('adding');
+                const alertList = document.getElementById('alertList');
+                const newAlert = document.createElement('div');
+                newAlert.className = 'alert-item';
+                newAlert.style.animation = 'fadeInUp 0.4s ease';
+                newAlert.innerHTML = `<div class="alert-info"><h4>黄金高于 $3,100</h4><p>创建时间: ${new Date().toLocaleString('zh-CN')}</p></div><span class="alert-status">监控中</span>`;
+                alertList.insertBefore(newAlert, alertList.firstChild);
+                showToast('价格提醒添加成功');
+            }, 300);
+        }
+        
+        function focusOnChart() { document.getElementById('mainChartSection').scrollIntoView({ behavior: 'smooth' }); }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        // 股票列表渲染
+        function renderStockCategories() {
+            const container = document.getElementById('stockCategories');
+            if (!container || typeof STOCK_CATEGORIES === 'undefined') return;
+            
+            let html = '';
+            for (const [key, category] of Object.entries(STOCK_CATEGORIES)) {
+                html += `
+                    <div style="margin-bottom: var(--space-6);">
+                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2);">
+                            <i class="ph ${category.icon}" style="color: var(--gold-primary);"></i>
+                            ${category.name}
+                        </h3>
+                        <div style="display: grid; gap: var(--space-2);">
+                            ${category.stocks.map(stock => `
+                                <div class="stock-item" data-symbol="${stock.symbol}">
+                                    <div style="display: flex; align-items: center; gap: var(--space-3);">
+                                        <div style="width: 40px; height: 40px; background: var(--gold-10); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; color: var(--gold-primary);">${stock.symbol.replace('^', '').substring(0, 4)}</div>
+                                        <div>
+                                            <div style="font-weight: 600; font-size: 0.9375rem; color: var(--text-primary);">${stock.name}</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-quaternary);">${stock.symbol} · ${stock.type}</div>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div class="stock-price" style="font-family: var(--font-mono); font-weight: 600; font-size: 1rem; color: var(--text-primary);">--</div>
+                                        <div class="stock-change" style="font-size: 0.75rem; display: flex; align-items: center; justify-content: flex-end; gap: 4px;">--</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+            updateStockPrices();
+        }
+        
+        function updateStockPrices() {
+            if (typeof STATIC_STOCK_DATA === 'undefined') return;
+            
+            for (const [symbol, data] of Object.entries(STATIC_STOCK_DATA)) {
+                const item = document.querySelector(`[data-symbol="${symbol}"]`);
+                if (item) {
+                    const priceEl = item.querySelector('.stock-price');
+                    const changeEl = item.querySelector('.stock-change');
+                    
+                    if (priceEl) priceEl.textContent = '$' + data.price.toFixed(2);
+                    if (changeEl) {
+                        const isUp = data.change >= 0;
+                        changeEl.innerHTML = `<i class="ph ph-arrow-${isUp ? 'up-right' : 'down-right'}"></i> ${data.change > 0 ? '+' : ''}${data.change.toFixed(2)}%`;
+                        changeEl.style.color = isUp ? 'var(--up)' : 'var(--down)';
+                    }
+                }
+            }
+            
+            document.getElementById('lastUpdate').textContent = '更新于: ' + new Date().toLocaleTimeString('zh-CN');
+        }
+        
+        function refreshStocks() {
+            const btn = document.querySelector('button[onclick="refreshStocks()"]');
+            if (btn) {
+                btn.style.opacity = '0.6';
+                btn.style.pointerEvents = 'none';
+            }
+            
+            if (typeof STATIC_STOCK_DATA !== 'undefined') {
+                for (const symbol in STATIC_STOCK_DATA) {
+                    const data = STATIC_STOCK_DATA[symbol];
+                    const priceChange = (Math.random() - 0.5) * 2;
+                    data.price = Math.max(0.01, data.price * (1 + priceChange * 0.01));
+                    data.change += priceChange * 0.5;
+                }
+                updateStockPrices();
+                showToast('股票数据已更新');
+            }
+            
+            setTimeout(() => {
+                if (btn) {
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                }
+            }, 1000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStockCategories();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+/* ============================================
+   GoldPulse CSS Variables v2.0
+   下一代视觉设计变量系统
+   ============================================ */
+
+:root {
+    /* ============================================
+       1. 色彩系统
+       ============================================ */
+    
+    /* 金色系统 - 品牌核心 */
+    --gold-primary: #ffd700;
+    --gold-secondary: #d4af37;
+    --gold-light: #ffed4a;
+    --gold-dark: #b8860b;
+    
+    /* 金色透明度 */
+    --gold-50: rgba(255, 215, 0, 0.5);
+    --gold-30: rgba(255, 215, 0, 0.3);
+    --gold-20: rgba(255, 215, 0, 0.2);
+    --gold-10: rgba(255, 215, 0, 0.1);
+    --gold-5: rgba(255, 215, 0, 0.05);
+    
+    /* 紫色系统 - 参考Linear */
+    --accent-purple: #8b5cf6;
+    --accent-purple-light: #a78bfa;
+    --accent-purple-dark: #7c3aed;
+    --accent-purple-30: rgba(139, 92, 246, 0.3);
+    --accent-purple-20: rgba(139, 92, 246, 0.2);
+    --accent-purple-10: rgba(139, 92, 246, 0.1);
+    
+    /* 蓝色系统 - 参考Stripe */
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-blue-30: rgba(59, 130, 246, 0.3);
+    --accent-cyan-30: rgba(6, 182, 212, 0.3);
+    
+    /* 背景色系统 - 深度层次 */
+    --bg-deep: #050508;
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-tertiary: #1a1a25;
+    --bg-elevated: #252532;
+    --bg-card: rgba(255, 255, 255, 0.03);
+    
+    /* 渐变背景 */
+    --gradient-bg-hero: linear-gradient(135deg, #0a0a0f 0%, #1a1025 50%, #0f172a 100%);
+    --gradient-bg-section: linear-gradient(180deg, #0a0a0f 0%, #12121a 100%);
+    --gradient-radial-gold: radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.15) 0%, transparent 50%);
+    --gradient-radial-purple: radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.1) 0%, transparent 50%);
+    --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4a 50%, #d4af37 100%);
+    --gradient-purple-blue: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    --gradient-gold-purple: linear-gradient(135deg, #ffd700, #8b5cf6);
+    --gradient-aurora: linear-gradient(135deg, #ffd700 0%, #8b5cf6 50%, #06b6d4 100%);
+    
+    /* 功能色 */
+    --up: #32d74b;
+    --up-glow: rgba(50, 215, 75, 0.3);
+    --down: #ff453a;
+    --down-glow: rgba(255, 69, 58, 0.3);
+    --up-20: rgba(50, 215, 75, 0.2);
+    --up-10: rgba(50, 215, 75, 0.1);
+    --down-20: rgba(255, 69, 58, 0.2);
+    --down-10: rgba(255, 69, 58, 0.1);
+    
+    /* 文字色 */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-tertiary: rgba(255, 255, 255, 0.6);
+    --text-quaternary: rgba(255, 255, 255, 0.4);
+    --text-muted: rgba(255, 255, 255, 0.3);
+    
+    /* 边框 */
+    --border-width: 1px;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-light: rgba(255, 255, 255, 0.05);
+    --border-gold: rgba(255, 215, 0, 0.3);
+    --border-purple: rgba(139, 92, 246, 0.3);
+    
+    /* ============================================
+       2. 字体系统
+       ============================================ */
+    --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* 字体层级 */
+    --text-display-xl: 700 96px/1 -0.03em;
+    --text-display-lg: 700 80px/1 -0.02em;
+    --text-display: 700 64px/1.1 -0.02em;
+    --text-h1: 700 48px/1.1 -0.02em;
+    --text-h2: 600 36px/1.2 -0.01em;
+    --text-h3: 600 28px/1.3 -0.01em;
+    --text-h4: 600 24px/1.4 0;
+    --text-h5: 600 20px/1.4 0;
+    --text-h6: 600 18px/1.4 0;
+    --text-body-lg: 400 18px/1.6 0;
+    --text-body: 400 16px/1.6 0;
+    --text-body-sm: 400 14px/1.6 0;
+    --text-label: 500 14px/1.4 0;
+    --text-caption: 500 12px/1.4 0.02em;
+    --text-overline: 600 11px/1.4 0.1em;
+    --text-mono-lg: 500 48px/1 -0.02em;
+    --text-mono: 500 32px/1 -0.02em;
+    --text-mono-sm: 500 18px/1.2 0;
+    
+    /* ============================================
+       3. 间距系统
+       ============================================ */
+    --space-0: 0;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
+    --space-40: 160px;
+    
+    /* 容器尺寸 */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1280px;
+    --container-2xl: 1440px;
+    --container-max: 1600px;
+    
+    /* ============================================
+       4. 圆角系统
+       ============================================ */
+    --radius-none: 0;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
+    --radius-3xl: 40px;
+    --radius-full: 9999px;
+    
+    /* ============================================
+       5. 阴影系统
+       ============================================ */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+    
+    /* 光晕 */
+    --glow-gold-sm: 0 0 20px rgba(255, 215, 0, 0.2);
+    --glow-gold: 0 0 40px rgba(255, 215, 0, 0.3);
+    --glow-gold-lg: 0 0 80px rgba(255, 215, 0, 0.4);
+    --glow-purple-sm: 0 0 20px rgba(139, 92, 246, 0.2);
+    --glow-purple: 0 0 40px rgba(139, 92, 246, 0.3);
+    
+    /* 卡片阴影 */
+    --shadow-card: 
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-card-hover:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 215, 0, 0.2),
+        0 0 60px rgba(255, 215, 0, 0.1);
+    
+    /* ============================================
+       6. 动效系统
+       ============================================ */
+    --ease-linear: linear;
+    --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-smooth: cubic-bezier(0.4, 0, 0, 1);
+    
+    --duration-instant: 0.1s;
+    --duration-fast: 0.15s;
+    --duration-normal: 0.25s;
+    --duration-slow: 0.4s;
+    --duration-slower: 0.6s;
+    --duration-slowest: 1s;
+    
+    /* ============================================
+       7. 尺寸与布局
+       ============================================ */
+    --nav-height: 72px;
+    --nav-height-mobile: 64px;
+    --max-width: 1280px;
+    
+    /* ============================================
+       8. Z-Index层级
+       ============================================ */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-nav: 1000;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-tooltip: 1070;
+    --z-toast: 1090;
+}
+
+/* ============================================
+   响应式断点字体调整
+   ============================================ */
+@media (max-width: 1024px) {
+    :root {
+        --text-display-xl: 700 64px/1 -0.02em;
+        --text-display-lg: 700 56px/1 -0.02em;
+        --text-display: 700 48px/1.1 -0.02em;
+        --text-h1: 700 40px/1.1 -0.02em;
+        --text-h2: 600 32px/1.2 -0.01em;
+        --text-h3: 600 24px/1.3 -0.01em;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --text-display-xl: 700 48px/1 -0.02em;
+        --text-display-lg: 700 42px/1 -0.02em;
+        --text-display: 700 36px/1.1 -0.02em;
+        --text-h1: 700 32px/1.1 -0.02em;
+        --text-h2: 600 28px/1.2 -0.01em;
+        --text-h3: 600 22px/1.3 -0.01em;
+        --space-40: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --text-display-xl: 700 36px/1 -0.02em;
+        --text-display-lg: 700 32px/1 -0.02em;
+        --text-display: 700 28px/1.1 -0.02em;
+        --text-h1: 700 28px/1.1 -0.02em;
+    }
+}

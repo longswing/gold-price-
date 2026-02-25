@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldPulse v2.0 - 掌握黄金脉搏，投资更有底气</title>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- v2 CSS System -->
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    
+    <style>
+        /* ============================================
+           GoldPulse v2.0 - 首页原型
+           下一代视觉设计完整演示
+           ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           1. Hero区域 - 全屏沉浸式
+           ============================================ */
+        
+        .hero-v2 {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--gradient-bg-hero);
+        }
+        
+        /* 粒子背景Canvas */
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* 背景图片层 */
+        .hero-bg-v2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('../assets/images/v2/hero-bg-v2.jpg') center/cover no-repeat;
+            opacity: 0.4;
+            z-index: 0;
+        }
+        
+        /* 渐变遮罩 */
+        .hero-overlay-v2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.8) 100%),
+                linear-gradient(180deg, rgba(10,10,15,0.9) 0%, transparent 50%, rgba(10,10,15,0.95) 100%);
+            z-index: 2;
+        }
+        
+        /* 网格纹理叠加 */
+        .hero-grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* 金色光晕背景 */
+        .hero-glow-v2 {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 2;
+            animation: glowBreathe 6s ease-in-out infinite;
+        }
+        
+        @keyframes glowBreathe {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        /* Hero内容区域 */
+        .hero-content-v2 {
+            position: relative;
+            z-index: 10;
+            max-width: var(--container-2xl);
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-20);
+            align-items: center;
+            width: 100%;
+        }
+        
+        /* Hero文字区域 */
+        .hero-text-v2 {
+            max-width: 640px;
+        }
+        
+        /* Live徽章 */
+        .hero-badge-v2 {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-6);
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out) 0.3s forwards;
+        }
+        
+        /* 巨型标题 - 72px */
+        .hero-title-v2 {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-6);
+            opacity: 0;
+            animation: fadeInUp 0.8s var(--ease-out) 0.4s forwards;
+        }
+        
+        .hero-title-v2 .text-gradient-gold {
+            background: linear-gradient(135deg, #fff 0%, var(--gold-primary) 50%, var(--gold-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 副标题 */
+        .hero-subtitle-v2 {
+            font-size: 21px;
+            line-height: 1.6;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-8);
+            max-width: 520px;
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out) 0.5s forwards;
+        }
+        
+        /* CTA按钮区域 */
+        .hero-cta-v2 {
+            display: flex;
+            gap: var(--space-4);
+            opacity: 0;
+            animation: fadeInUp 0.6s var(--ease-out) 0.6s forwards;
+        }
+        
+        /* 发光CTA按钮 */
+        .btn-glow-gold {
+            position: relative;
+            background: var(--gradient-gold);
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 18px 36px;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all var(--duration-normal) var(--ease-spring);
+            box-shadow: 0 4px 20px var(--gold-30);
+        }
+        
+        .btn-glow-gold::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-glow-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--gold-50), 0 0 60px rgba(255,215,0,0.2);
+        }
+        
+        .btn-glow-gold:hover::before {
+            left: 100%;
+        }
+        
+        /* 次要按钮 */
+        .btn-hero-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 18px 36px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-spring);
+            text-decoration: none;
+        }
+        
+        .btn-hero-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        /* ============================================
+           实时价格卡片 - 玻璃拟态 + 发光边框
+           ============================================ */
+        
+        .hero-price-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: scaleIn 0.8s var(--ease-spring) 0.7s forwards;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 215, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        
+        /* 发光边框效果 */
+        .hero-price-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.4), transparent, rgba(255,215,0,0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 悬浮光晕追踪效果 */
+        .hero-price-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 215, 0, 0.08),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--duration-normal);
+            pointer-events: none;
+            border-radius: var(--radius-2xl);
+        }
+        
+        .hero-price-card:hover::after {
+            opacity: 1;
+        }
+        
+        /* 卡片头部 */
+        .price-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+        
+        .price-card-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .price-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 28px;
+            box-shadow: 0 0 20px rgba(255,215,0,0.1);
+        }
+        
+        .price-card-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .price-card-info span {
+            font-size: 13px;
+            color: var(--text-quaternary);
+        }
+        
+        /* Live徽章 */
+        .badge-live-v2 {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(50, 215, 75, 0.1);
+            border: 1px solid rgba(50, 215, 75, 0.2);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--up);
+        }
+        
+        .badge-live-v2::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--up);
+            border-radius: 50%;
+            animation: livePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+        
+        /* 价格显示 */
+        .price-display-v2 {
+            margin-bottom: var(--space-4);
+        }
+        
+        .price-value-v2 {
+            font-family: var(--font-mono);
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 0%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-2);
+            transition: all 0.3s;
+        }
+        
+        .price-value-v2.flash-up {
+            animation: flashUp 0.6s ease-out;
+        }
+        
+        .price-value-v2.flash-down {
+            animation: flashDown 0.6s ease-out;
+        }
+        
+        @keyframes flashUp {
+            0%, 100% { filter: brightness(1); }
+            50% { color: var(--up); text-shadow: 0 0 30px var(--up-glow); -webkit-text-fill-color: var(--up); }
+        }
+        
+        @keyframes flashDown {
+            0%, 100% { filter: brightness(1); }
+            50% { color: var(--down); text-shadow: 0 0 30px var(--down-glow); -webkit-text-fill-color: var(--down); }
+        }
+        
+        /* 涨跌幅 */
+        .price-change-v2 {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .price-change-v2.up {
+            color: var(--up);
+            background: var(--up-10);
+            box-shadow: 0 0 20px rgba(50, 215, 75, 0.1);
+        }
+        
+        .price-change-v2.down {
+            color: var(--down);
+            background: var(--down-10);
+            box-shadow: 0 0 20px rgba(255, 69, 58, 0.1);
+        }
+        
+        /* 双币种转换 */
+        .price-conversion-v2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            margin-top: var(--space-6);
+            padding-top: var(--space-6);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .conversion-item-v2 {
+            text-align: center;
+            padding: var(--space-4);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-lg);
+        }
+        
+        .conversion-item-v2:first-child {
+            border-right: none;
+        }
+        
+        .conversion-label-v2 {
+            font-size: 12px;
+            color: var(--text-quaternary);
+            margin-bottom: var(--space-1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .conversion-value-v2 {
+            font-family: var(--font-mono);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .conversion-value-v2.cny {
+            color: var(--gold-primary);
+        }
+        
+        /* 滚动提示 */
+        .scroll-hint-v2 {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--text-quaternary);
+            font-size: 14px;
+            z-index: 10;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 0.6s var(--ease-out) 1s forwards, bounce 2s ease-in-out infinite 1.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        /* ============================================
+           2. 行情滚动条
+           ============================================ */
+        
+        .ticker-v2 {
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255,215,0,0.03) 50%, 
+                transparent 100%);
+            border-top: 1px solid rgba(255,215,0,0.08);
+            border-bottom: 1px solid rgba(255,215,0,0.08);
+            padding: var(--space-4) 0;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .ticker-wrapper-v2 {
+            display: flex;
+            animation: ticker 25s linear infinite;
+        }
+        
+        .ticker-wrapper-v2:hover {
+            animation-play-state: paused;
+        }
+        
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .ticker-item-v2 {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            padding: 0 var(--space-8);
+            white-space: nowrap;
+        }
+        
+        .ticker-market-v2 {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .ticker-market-v2 i {
+            color: var(--gold-primary);
+        }
+        
+        .ticker-price-v2 {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+        
+        .ticker-change-v2 {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .ticker-change-v2.up { color: var(--up); }
+        .ticker-change-v2.down { color: var(--down); }
+        
+        /* ============================================
+           3. Features区域 - 3列卡片 + 光晕追踪
+           ============================================ */
+        
+        .features-v2 {
+            padding: var(--space-32) 0;
+            background: var(--bg-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 背景装饰 */
+        .features-v2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(255,215,0,0.05) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 70%, rgba(139,92,246,0.03) 0%, transparent 30%);
+            pointer-events: none;
+        }
+        
+        .section-header-v2 {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto var(--space-16);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-label-v2 {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--gold-10);
+            border: 1px solid var(--gold-20);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gold-primary);
+            margin-bottom: var(--space-4);
+        }
+        
+        .section-title-v2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, #fff 0%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle-v2 {
+            font-size: 20px;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+        }
+        
+        /* Features网格 */
+        .features-grid-v2 {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Feature卡片 - 玻璃拟态 + 光晕追踪 */
+        .feature-card-v2 {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            transition: all var(--duration-slow) var(--ease-spring);
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        .feature-card-v2.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 光晕追踪效果 */
+        .feature-card-v2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 215, 0, 0.08),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--duration-normal);
+            pointer-events: none;
+            z-index: 1;
+            border-radius: var(--radius-2xl);
+        }
+        
+        .feature-card-v2:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-card-v2:hover {
+            transform: translateY(-12px);
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 215, 0, 0.1),
+                0 0 80px rgba(255, 215, 0, 0.08);
+        }
+        
+        /* 卡片图片 */
+        .feature-image-v2 {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .feature-image-v2 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .feature-card-v2:hover .feature-image-v2 img {
+            transform: scale(1.08);
+        }
+        
+        .feature-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(180deg, transparent 0%, var(--bg-primary) 100%);
+        }
+        
+        /* 卡片内容 */
+        .feature-content-v2 {
+            padding: var(--space-6);
+            text-align: center;
+        }
+        
+        .feature-icon-v2 {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -52px auto var(--space-5);
+            color: var(--gold-primary);
+            font-size: 32px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            transition: transform var(--duration-normal) var(--ease-spring);
+        }
+        
+        .feature-card-v2:hover .feature-icon-v2 {
+            transform: scale(1.1);
+        }
+        
+        .feature-title-v2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+            color: var(--text-primary);
+        }
+        
+        .feature-desc-v2 {
+            font-size: 15px;
+            color: var(--text-tertiary);
+            line-height: 1.7;
+        }
+        
+        /* ============================================
+           4. CTA区域 - 3D悬浮效果
+           ============================================ */
+        
+        .cta-v2 {
+            padding: var(--space-32) 0;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 背景图片 */
+        .cta-v2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/v2/gold-bars-v2.jpg') center/cover no-repeat;
+            opacity: 0.1;
+        }
+        
+        /* 金色光晕 */
+        .cta-v2::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        
+        .cta-content-v2 {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 var(--space-6);
+        }
+        
+        .cta-title-v2 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, #fff 0%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-subtitle-v2 {
+            font-size: 20px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-8);
+        }
+        
+        /* 3D悬浮卡片 */
+        .cta-card-3d {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-10);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 215, 0, 0.1);
+        }
+        
+        .cta-buttons-v2 {
+            display: flex;
+            gap: var(--space-4);
+            justify-content: center;
+            margin-top: var(--space-8);
+        }
+        
+        .cta-buttons-v2 .btn-glow-gold {
+            padding: 20px 44px;
+            font-size: 18px;
+        }
+        
+        .cta-buttons-v2 .btn-hero-secondary {
+            padding: 20px 44px;
+            font-size: 18px;
+        }
+        
+        /* ============================================
+           5. Footer v2
+           ============================================ */
+        
+        .footer-v2 {
+            background: var(--bg-deep);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: var(--space-16) 0 var(--space-8);
+            position: relative;
+        }
+        
+        /* 网格背景 */
+        .footer-v2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,215,0,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,215,0,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        
+        .footer-content-v2 {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-12);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-brand-v2 p {
+            color: var(--text-quaternary);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: var(--space-4);
+            max-width: 280px;
+        }
+        
+        .footer-links-v2 h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-links-v2 a {
+            display: block;
+            color: var(--text-quaternary);
+            text-decoration: none;
+            font-size: 14px;
+            padding: var(--space-2) 0;
+            transition: all var(--duration-fast);
+        }
+        
+        .footer-links-v2 a:hover {
+            color: var(--gold-primary);
+            transform: translateX(4px);
+        }
+        
+        .footer-bottom-v2 {
+            max-width: var(--container-xl);
+            margin: var(--space-12) auto 0;
+            padding: var(--space-6) var(--space-6) 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ============================================
+           6. 组件展示区域 (演示用)
+           ============================================ */
+        
+        .components-showcase {
+            padding: var(--space-24) 0;
+            background: var(--bg-secondary);
+        }
+        
+        .showcase-header {
+            text-align: center;
+            margin-bottom: var(--space-12);
+        }
+        
+        .showcase-grid {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+        }
+        
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+        }
+        
+        .showcase-card h4 {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* ============================================
+           响应式设计
+           ============================================ */
+        
+        @media (max-width: 1024px) {
+            .hero-content-v2 {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: var(--space-12);
+            }
+            
+            .hero-text-v2 {
+                max-width: 100%;
+            }
+            
+            .hero-title-v2 {
+                font-size: 56px;
+            }
+            
+            .hero-subtitle-v2 {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-cta-v2 {
+                justify-content: center;
+            }
+            
+            .features-grid-v2 {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+            
+            .footer-content-v2 {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .cta-title-v2 {
+                font-size: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title-v2 {
+                font-size: 40px;
+            }
+            
+            .price-value-v2 {
+                font-size: 40px;
+            }
+            
+            .section-title-v2 {
+                font-size: 32px;
+            }
+            
+            .cta-title-v2 {
+                font-size: 32px;
+            }
+            
+            .hero-cta-v2 {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-glow-gold,
+            .btn-hero-secondary {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .cta-buttons-v2 {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-content-v2 {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: var(--space-8);
+            }
+            
+            .footer-brand-v2 p {
+                max-width: 100%;
+            }
+            
+            .footer-bottom-v2 {
+                flex-direction: column;
+                gap: var(--space-4);
+                text-align: center;
+            }
+        }
+        
+        /* 无障碍：减少动画 */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         1. Hero区域 - 全屏沉浸式
+         ============================================ -->
+    <section class="hero-v2" id="hero">
+        <!-- 粒子背景Canvas -->
+        <canvas class="hero-particles" id="particleCanvas"></canvas>
+        
+        <!-- 背景图片 -->
+        <div class="hero-bg-v2"></div>
+        
+        <!-- 渐变遮罩 -->
+        <div class="hero-overlay-v2"></div>
+        
+        <!-- 网格纹理 -->
+        <div class="hero-grid-overlay"></div>
+        
+        <!-- 金色光晕 -->
+        <div class="hero-glow-v2"></div>
+        
+        <!-- Hero内容 -->
+        <div class="hero-content-v2">
+            <div class="hero-text-v2">
+                <!-- Live徽章 -->
+                <div class="hero-badge-v2">
+                    <span class="badge badge-gold">
+                        <i class="ph-fill ph-lightning"></i>
+                        实时行情更新
+                    </span>
+                </div>
+                
+                <!-- 巨型标题 -->
+                <h1 class="hero-title-v2">
+                    <span class="text-gradient-gold">掌握黄金脉搏</span><br>
+                    投资更有底气
+                </h1>
+                
+                <!-- 副标题 -->
+                <p class="hero-subtitle-v2">
+                    实时追踪全球黄金价格走势，专业分析工具助您做出明智投资决策。覆盖黄金、股指等多类资产。
+                </p>
+                
+                <!-- CTA按钮 -->
+                <div class="hero-cta-v2">
+                    <a href="markets.html" class="btn-glow-gold">
+                        <i class="ph-fill ph-rocket-launch"></i>
+                        立即体验
+                    </a>
+                    <a href="#features" class="btn-hero-secondary">
+                        <i class="ph ph-play-circle"></i>
+                        了解更多
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 实时价格卡片 -->
+            <div class="hero-price-card" id="priceCard">
+                <div class="price-card-header">
+                    <div class="price-card-title">
+                        <div class="price-card-icon">
+                            <i class="ph ph-trend-up"></i>
+                        </div>
+                        <div class="price-card-info">
+                            <h3>黄金价格</h3>
+                            <span>XAU/USD</span>
+                        </div>
+                    </div>
+                    <div class="badge-live-v2">实时</div>
+                </div>
+                
+                <div class="price-display-v2">
+                    <div class="price-value-v2" id="heroPrice">$5,177.31</div>
+                    <div class="price-change-v2 up" id="heroChange">
+                        <i class="ph ph-arrow-up-right"></i>
+                        <span>+0.37%</span>
+                    </div>
+                </div>
+                
+                <div class="price-conversion-v2">
+                    <div class="conversion-item-v2">
+                        <div class="conversion-label-v2">美元/盎司</div>
+                        <div class="conversion-value-v2" id="usdPrice">$5,177.31</div>
+                    </div>
+                    <div class="conversion-item-v2">
+                        <div class="conversion-label-v2">人民币/克</div>
+                        <div class="conversion-value-v2 cny" id="cnyPrice">¥1,198.47</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 滚动提示 -->
+        <a href="#ticker" class="scroll-hint-v2">
+            <span>向下滚动</span>
+            <i class="ph ph-caret-down"></i>
+        </a>
+    </section>
+    
+    <!-- ============================================
+         2. 行情滚动条
+         ============================================ -->
+    <section class="ticker-v2" id="ticker">
+        <div class="ticker-wrapper-v2">
+            <!-- 第一组 -->
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph-fill ph-coin"></i> 黄金</span>
+                <span class="ticker-price-v2">$5,177.31</span>
+                <span class="ticker-change-v2 up">+0.37%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-buildings"></i> 恒生指数</span>
+                <span class="ticker-price-v2">26,738.88</span>
+                <span class="ticker-change-v2 up">+0.56%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-chart-line-up"></i> 纳斯达克</span>
+                <span class="ticker-price-v2">22,863.68</span>
+                <span class="ticker-change-v2 up">+1.04%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-chart-bar"></i> 标普500</span>
+                <span class="ticker-price-v2">5,892.35</span>
+                <span class="ticker-change-v2 up">+0.78%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-buildings"></i> 上证指数</span>
+                <span class="ticker-price-v2">3,350.25</span>
+                <span class="ticker-change-v2 up">+0.32%</span>
+            </div>
+            <!-- 重复组实现无缝滚动 -->
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph-fill ph-coin"></i> 黄金</span>
+                <span class="ticker-price-v2">$5,177.31</span>
+                <span class="ticker-change-v2 up">+0.37%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-buildings"></i> 恒生指数</span>
+                <span class="ticker-price-v2">26,738.88</span>
+                <span class="ticker-change-v2 up">+0.56%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-chart-line-up"></i> 纳斯达克</span>
+                <span class="ticker-price-v2">22,863.68</span>
+                <span class="ticker-change-v2 up">+1.04%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-chart-bar"></i> 标普500</span>
+                <span class="ticker-price-v2">5,892.35</span>
+                <span class="ticker-change-v2 up">+0.78%</span>
+            </div>
+            <div class="ticker-item-v2">
+                <span class="ticker-market-v2"><i class="ph ph-buildings"></i> 上证指数</span>
+                <span class="ticker-price-v2">3,350.25</span>
+                <span class="ticker-change-v2 up">+0.32%</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================
+         3. Features区域 - 3列卡片
+         ============================================ -->
+    <section class="features-v2" id="features">
+        <div class="section-header-v2">
+            <div class="section-label-v2">
+                <i class="ph-fill ph-star"></i>
+                核心功能
+            </div>
+            <h2 class="section-title-v2">为什么选择 GoldPulse</h2>
+            <p class="section-subtitle-v2">专业工具，助力明智决策</p>
+        </div>
+        
+        <div class="features-grid-v2">
+            <!-- Feature 1: 实时数据 -->
+            <div class="feature-card-v2 reveal-up stagger-1">
+                <div class="feature-image-v2">
+                    <img src="../assets/images/v2/data-center.jpg" alt="实时数据">
+                    <div class="feature-image-overlay"></div>
+                </div>
+                <div class="feature-content-v2">
+                    <div class="feature-icon-v2">
+                        <i class="ph ph-lightning"></i>
+                    </div>
+                    <h3 class="feature-title-v2">实时数据</h3>
+                    <p class="feature-desc-v2">毫秒级行情更新，让您第一时间掌握全球黄金市场动态，不错过任何投资机会。</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2: 专业图表 -->
+            <div class="feature-card-v2 reveal-up stagger-2">
+                <div class="feature-image-v2">
+                    <img src="../assets/images/v2/business-chart.jpg" alt="专业图表">
+                    <div class="feature-image-overlay"></div>
+                </div>
+                <div class="feature-content-v2">
+                    <div class="feature-icon-v2">
+                        <i class="ph ph-chart-bar"></i>
+                    </div>
+                    <h3 class="feature-title-v2">专业图表</h3>
+                    <p class="feature-desc-v2">交互式图表支持多时间维度分析，技术指标叠加，深度解读价格走势。</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3: 智能提醒 -->
+            <div class="feature-card-v2 reveal-up stagger-3">
+                <div class="feature-image-v2">
+                    <img src="../assets/images/v2/blockchain-abstract.jpg" alt="智能提醒">
+                    <div class="feature-image-overlay"></div>
+                </div>
+                <div class="feature-content-v2">
+                    <div class="feature-icon-v2">
+                        <i class="ph ph-bell"></i>
+                    </div>
+                    <h3 class="feature-title-v2">智能提醒</h3>
+                    <p class="feature-desc-v2">设置价格目标，到达目标价位立即通知您。24小时守护您的投资。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================
+         4. CTA区域 - 3D悬浮效果
+         ============================================ -->
+    <section class="cta-v2">
+        <div class="cta-content-v2">
+            <h2 class="cta-title-v2">开始您的投资之旅</h2>
+            <p class="cta-subtitle-v2">加入数万名投资者的行列，让GoldPulse成为您的投资伙伴</p>
+            
+            <div class="cta-card-3d" id="ctaCard">
+                <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 24px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; color: var(--gold-primary);">50K+</div>
+                        <div style="font-size: 14px; color: var(--text-tertiary);">活跃用户</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; color: var(--gold-primary);">99.9%</div>
+                        <div style="font-size: 14px; color: var(--text-tertiary);">数据准确率</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700; color: var(--gold-primary);">24/7</div>
+                        <div style="font-size: 14px; color: var(--text-tertiary);">实时监控</div>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons-v2">
+                    <a href="markets.html" class="btn-glow-gold">
+                        <i class="ph-fill ph-rocket-launch"></i>
+                        免费体验
+                    </a>
+                    <a href="login.html" class="btn-hero-secondary">
+                        <i class="ph ph-user"></i>
+                        登录账户
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================
+         5. Footer v2
+         ============================================ -->
+    <footer class="footer-v2">
+        <div class="footer-content-v2">
+            <div class="footer-brand-v2">
+                <a href="../index.html" class="nav-logo">
+                    <div class="nav-logo-icon">
+                        <i class="ph-fill ph-coin"></i>
+                    </div>
+                    <span>GoldPulse</span>
+                </a>
+                <p>专业的贵金属投资数据平台，为投资者提供实时、准确的市场信息。让您的每一次投资决策都有据可依。</p>
+            </div>
+            
+            <div class="footer-links-v2">
+                <h4>产品</h4>
+                <a href="markets.html">行情中心</a>
+                <a href="analysis.html">技术分析</a>
+                <a href="news.html">财经资讯</a>
+            </div>
+            
+            <div class="footer-links-v2">
+                <h4>资源</h4>
+                <a href="#">帮助中心</a>
+                <a href="#">API文档</a>
+                <a href="#">使用教程</a>
+            </div>
+            
+            <div class="footer-links-v2">
+                <h4>关于</h4>
+                <a href="#">关于我们</a>
+                <a href="#">联系我们</a>
+                <a href="#">隐私政策</a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom-v2">
+            <span>© 2026 GoldPulse. 数据仅供参考，投资有风险。</span>
+            <span>数据来源：goldprice.org, Yahoo Finance</span>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         JavaScript实现
+         ============================================ -->
+    <script>
+        // ============================================
+        // 1. 粒子系统实现 (Canvas)
+        // ============================================
+        class ParticleSystem {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.connections = [];
+                this.mouse = { x: null, y: null };
+                this.isActive = true;
+                
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                this.createParticles();
+                this.bindEvents();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = window.innerWidth < 768 ? 30 : 60;
+                this.particles = [];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            
+            bindEvents() {
+                window.addEventListener('resize', () => {
+                    this.resize();
+                    this.createParticles();
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                // 页面不可见时暂停动画
+                document.addEventListener('visibilitychange', () => {
+                    this.isActive = document.visibilityState === 'visible';
+                });
+            }
+            
+            animate() {
+                if (!this.isActive) {
+                    requestAnimationFrame(() => this.animate());
+                    return;
+                }
+                
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // 更新和绘制粒子
+                this.particles.forEach((p, i) => {
+                    // 更新位置
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    // 边界检测
+                    if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
+                    
+                    // 鼠标交互
+                    if (this.mouse.x && this.mouse.y) {
+                        const dx = this.mouse.x - p.x;
+                        const dy = this.mouse.y - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (dist < 150) {
+                            const force = (150 - dist) / 150;
+                            p.vx -= dx * force * 0.01;
+                            p.vy -= dy * force * 0.01;
+                        }
+                    }
+                    
+                    // 绘制粒子
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(255, 215, 0, ${p.opacity})`;
+                    this.ctx.fill();
+                });
+                
+                // 绘制连接线
+                this.particles.forEach((p1, i) => {
+                    this.particles.slice(i + 1).forEach(p2 => {
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (dist < 120) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(p1.x, p1.y);
+                            this.ctx.lineTo(p2.x, p2.y);
+                            this.ctx.strokeStyle = `rgba(255, 215, 0, ${0.1 * (1 - dist / 120)})`;
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // 初始化粒子系统
+        const particleCanvas = document.getElementById('particleCanvas');
+        if (particleCanvas) {
+            new ParticleSystem(particleCanvas);
+        }
+        
+        // ============================================
+        // 2. 光晕追踪效果
+        // ============================================
+        function initSpotlightEffect() {
+            const cards = document.querySelectorAll('.hero-price-card, .feature-card-v2');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+        
+        initSpotlightEffect();
+        
+        // ============================================
+        // 3. 滚动触发动画
+        // ============================================
+        function initScrollReveal() {
+            const observerOptions = {
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+                observer.observe(el);
+            });
+        }
+        
+        initScrollReveal();
+        
+        // ============================================
+        // 4. 3D卡片倾斜效果
+        // ============================================
+        function init3DTilt() {
+            const card = document.getElementById('ctaCard');
+            if (!card) return;
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        }
+        
+        init3DTilt();
+        
+        // ============================================
+        // 5. 实时价格更新
+        // ============================================
+        let currentPrice = 5177.31;
+        
+        async function updatePrice() {
+            try {
+                const response = await fetch('https://data-asg.goldprice.org/dbXRates/USD', {
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+                const data = await response.json();
+                
+                if (data?.items?.[0]) {
+                    const item = data.items[0];
+                    const newPrice = item.xauPrice;
+                    const change = item.pcXau;
+                    
+                    const priceEl = document.getElementById('heroPrice');
+                    const usdEl = document.getElementById('usdPrice');
+                    const cnyEl = document.getElementById('cnyPrice');
+                    const changeEl = document.getElementById('heroChange');
+                    
+                    // 价格闪烁动画
+                    const direction = newPrice > currentPrice ? 'up' : 'down';
+                    priceEl.classList.add(`flash-${direction}`);
+                    setTimeout(() => priceEl.classList.remove(`flash-${direction}`), 600);
+                    
+                    // 更新价格显示
+                    priceEl.textContent = '$' + newPrice.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    
+                    usdEl.textContent = '$' + newPrice.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    
+                    // 更新人民币价格
+                    const cnyPrice = (newPrice / 31.1035 * 7.2).toFixed(2);
+                    cnyEl.textContent = '¥' + cnyPrice;
+                    
+                    // 更新涨跌幅
+                    const isUp = change >= 0;
+                    changeEl.className = 'price-change-v2 ' + (isUp ? 'up' : 'down');
+                    changeEl.innerHTML = `
+                        <i class="ph ph-arrow-${isUp ? 'up-right' : 'down-right'}"></i>
+                        <span>${isUp ? '+' : ''}${change.toFixed(2)}%</span>
+                    `;
+                    
+                    currentPrice = newPrice;
+                }
+            } catch (e) {
+                console.log('价格更新失败，使用默认数据');
+            }
+        }
+        
+        // 初始更新
+        updatePrice();
+        // 每30秒更新一次
+        setInterval(updatePrice, 30000);
+        
+        // ============================================
+        // 6. 平滑滚动
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // ============================================
+        // 7. 导航栏滚动效果
+        // ============================================
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar-v2');
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

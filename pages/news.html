@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<!-- GoldPulse v2.0 Updated -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财经资讯 - GoldPulse v2.0</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- v2 CSS System -->
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           Navigation v2
+           ============================================ */
+        .navbar-v2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: var(--z-nav);
+            transition: all var(--duration-normal);
+        }
+        
+        .navbar-v2.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-container {
+            max-width: var(--container-xl);
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font: var(--text-h5);
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: opacity var(--duration-fast);
+        }
+        
+        .nav-logo:hover { opacity: 0.8; }
+        
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .nav-link {
+            padding: var(--space-2) var(--space-4);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link.active {
+            color: var(--gold-primary);
+            background: var(--gold-10);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        /* ============================================
+           Hero News v2 - 全屏背景图
+           ============================================ */
+        .hero-news {
+            margin-top: var(--nav-height);
+            height: 65vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(10,10,15,0.7), rgba(10,10,15,0.5)),
+                        url('../assets/images/v2/golden-luxury.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            padding: var(--space-12) var(--space-8);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: var(--gold-10);
+            border: 1px solid var(--gold-20);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            color: var(--gold-primary);
+            margin-bottom: var(--space-5);
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-tag:hover {
+            background: var(--gold-20);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, #fff, var(--gold-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 30px rgba(255,215,0,0.2));
+        }
+        
+        .hero-title:hover {
+            filter: drop-shadow(0 0 40px rgba(255,215,0,0.4));
+        }
+        
+        .hero-excerpt {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-6);
+        }
+        
+        .hero-meta {
+            display: flex;
+            gap: var(--space-6);
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+        
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
+        }
+        
+        .hero-meta span:hover {
+            color: var(--gold-primary);
+        }
+        
+        /* ============================================
+           Main Content
+           ============================================ */
+        .main-content {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-6);
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: var(--space-10);
+        }
+        
+        /* ============================================
+           Filter Bar - 胶囊按钮
+           ============================================ */
+        .filter-bar {
+            display: flex;
+            gap: var(--space-3);
+            margin-bottom: var(--space-8);
+            overflow-x: auto;
+            padding-bottom: var(--space-2);
+        }
+        
+        .filter-btn {
+            padding: var(--space-2) var(--space-5);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            backdrop-filter: blur(10px);
+        }
+        
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background: var(--gold-10);
+            border-color: var(--gold-20);
+            color: var(--gold-primary);
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        /* ============================================
+           News Grid - 左图右文
+           ============================================ */
+        .news-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-5);
+        }
+        
+        .news-card {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--space-6);
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            transition: all 0.4s var(--ease-spring);
+            cursor: pointer;
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+        }
+        
+        .news-card:nth-child(1) { animation-delay: 0.1s; }
+        .news-card:nth-child(2) { animation-delay: 0.15s; }
+        .news-card:nth-child(3) { animation-delay: 0.2s; }
+        .news-card:nth-child(4) { animation-delay: 0.25s; }
+        .news-card:nth-child(5) { animation-delay: 0.3s; }
+        
+        .news-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,215,0,0.15);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .news-card.hidden {
+            display: none;
+        }
+        
+        .news-image {
+            height: 100%;
+            min-height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .news-card:hover .news-image img {
+            transform: scale(1.08);
+        }
+        
+        .news-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .news-card:hover .news-image-overlay {
+            opacity: 1;
+        }
+        
+        .news-image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--gold-primary);
+        }
+        
+        .news-content {
+            padding: var(--space-6) var(--space-6) var(--space-6) 0;
+        }
+        
+        .news-tag {
+            display: inline-block;
+            padding: var(--space-1) var(--space-3);
+            background: var(--gold-10);
+            border: 1px solid var(--gold-20);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--gold-primary);
+            margin-bottom: var(--space-3);
+            transition: all 0.3s;
+        }
+        
+        .news-card:hover .news-tag {
+            background: var(--gold-20);
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .news-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+            line-height: 1.4;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        
+        .news-card:hover .news-title {
+            color: var(--gold-primary);
+        }
+        
+        .news-excerpt {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: var(--space-4);
+        }
+        
+        .news-meta {
+            display: flex;
+            gap: var(--space-4);
+            font-size: 0.75rem;
+            color: var(--text-quaternary);
+        }
+        
+        .news-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.3s;
+        }
+        
+        .news-meta span:hover {
+            color: var(--text-secondary);
+        }
+        
+        /* ============================================
+           Load More - 发光按钮
+           ============================================ */
+        .load-more {
+            text-align: center;
+            padding: var(--space-10);
+        }
+        
+        .btn-load {
+            padding: var(--space-4) var(--space-8);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-load:hover:not(:disabled) {
+            background: var(--gold-10);
+            border-color: var(--gold-20);
+            color: var(--gold-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-gold);
+        }
+        
+        .btn-load:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-load.loading {
+            pointer-events: none;
+        }
+        
+        .btn-load.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        .btn-load.completed {
+            background: transparent;
+            border-color: rgba(255,255,255,0.05);
+            color: var(--text-quaternary);
+            cursor: default;
+        }
+        
+        .btn-load.completed:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* ============================================
+           Sidebar - 玻璃拟态
+           ============================================ */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-6);
+        }
+        
+        .sidebar-card {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .sidebar-card:hover {
+            border-color: rgba(255,215,0,0.1);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .sidebar-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-5);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .sidebar-title i {
+            color: var(--gold-primary);
+        }
+        
+        /* 热门话题 */
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .topic-item:hover {
+            padding-left: var(--space-2);
+        }
+        
+        .topic-rank {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            width: 32px;
+            transition: transform 0.3s;
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
+        }
+        
+        .topic-item:hover .topic-rank {
+            transform: scale(1.2);
+        }
+        
+        .topic-content h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        
+        .topic-item:hover .topic-content h4 {
+            color: var(--gold-primary);
+        }
+        
+        .topic-content p {
+            font-size: 0.75rem;
+            color: var(--text-quaternary);
+        }
+        
+        /* 市场日历 */
+        .calendar-item {
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .calendar-item:last-child {
+            border-bottom: none;
+        }
+        
+        .calendar-item:hover {
+            padding-left: var(--space-2);
+        }
+        
+        .calendar-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        
+        .calendar-item:hover .calendar-title {
+            color: var(--gold-primary);
+        }
+        
+        .calendar-time {
+            font-size: 0.75rem;
+            color: var(--text-quaternary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .calendar-time i {
+            color: var(--gold-primary);
+        }
+        
+        /* Animations */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .news-card.new-loaded {
+            animation: slideUp 0.5s ease forwards;
+        }
+        
+        /* ============================================
+           Skeleton Loading - 骨架屏
+           ============================================ */
+        .skeleton {
+            pointer-events: none;
+        }
+        
+        .skeleton-img,
+        .skeleton-tag,
+        .skeleton-title,
+        .skeleton-excerpt,
+        .skeleton-meta {
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0.03) 25%,
+                rgba(255,255,255,0.08) 50%,
+                rgba(255,255,255,0.03) 75%
+            );
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+            border-radius: 4px;
+        }
+        
+        .skeleton-img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .skeleton-tag {
+            width: 80px;
+            height: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .skeleton-title {
+            width: 100%;
+            height: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .skeleton-excerpt {
+            width: 100%;
+            height: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .skeleton-meta {
+            width: 120px;
+            height: 14px;
+            margin-top: 16px;
+        }
+        
+        @keyframes skeletonLoading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Completion Message */
+        .completion-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            color: var(--text-quaternary);
+            font-size: 0.875rem;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .completion-message i {
+            color: var(--up);
+        }
+        
+        /* Toast Message */
+        .toast-message {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            background: rgba(20,20,25,0.95);
+            border: 1px solid var(--gold-20);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.4s var(--ease-spring);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-xl), var(--glow-gold-sm);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+            }
+            .hero-title {
+                font-size: 32px;
+            }
+            .hero-news {
+                height: 50vh;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .news-card {
+                grid-template-columns: 1fr;
+            }
+            .news-image {
+                height: 200px;
+            }
+            .news-content {
+                padding: var(--space-5);
+            }
+            .hero-slide {
+                padding: var(--space-6);
+            }
+            .nav-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar-v2">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <div class="nav-logo-icon"><i class="ph-fill ph-coin"></i></div>
+                <span>GoldPulse</span>
+            </a>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="markets.html" class="nav-link">行情</a>
+                <a href="analysis.html" class="nav-link">分析</a>
+                <a href="news.html" class="nav-link active">资讯</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-secondary" onclick="location.href='login.html'">登录</button>
+                <button class="btn btn-primary" onclick="location.href='login.html?action=register'">注册</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero头条 -->
+    <section class="hero-news">
+        <div class="hero-slide">
+            <div class="hero-content">
+                <div class="hero-tag" onclick="filterNews('黄金市场')">
+                    <i class="ph-fill ph-coin"></i>
+                    黄金市场
+                </div>
+                <h1 class="hero-title" onclick="location.href='news-detail.html?id=1'">黄金价格突破5200美元关口，创近期新高</h1>
+                <p class="hero-excerpt">受全球地缘政治紧张局势影响，避险资产需求增加，黄金价格持续走高。分析师认为短期仍有上涨空间...</p>
+                <div class="hero-meta">
+                    <span><i class="ph ph-clock"></i> 2小时前</span>
+                    <span><i class="ph ph-eye"></i> 2,341 阅读</span>
+                    <span><i class="ph ph-read-cv-logo"></i> 3分钟阅读</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="news-column">
+            <!-- 过滤器 -->
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterNews('all', this)">全部</button>
+                <button class="filter-btn" onclick="filterNews('黄金市场', this)">黄金市场</button>
+                <button class="filter-btn" onclick="filterNews('美联储', this)">美联储</button>
+                <button class="filter-btn" onclick="filterNews('地缘政治', this)">地缘政治</button>
+                <button class="filter-btn" onclick="filterNews('投资策略', this)">投资策略</button>
+            </div>
+            
+            <!-- 新闻列表 -->
+            <div class="news-grid" id="newsGrid">
+                <!-- 新闻卡片由JavaScript动态生成 -->
+            </div>
+            
+            <div class="load-more">
+                <button class="btn-load" id="loadMoreBtn" onclick="loadMoreNews()">
+                    <i class="ph ph-spinner-gap"></i>
+                    <span>加载更多</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <!-- 热门话题 -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">
+                    <i class="ph ph-fire"></i>
+                    热门话题
+                </h3>
+                <div class="topic-item" onclick="filterNews('黄金价格预测')">
+                    <span class="topic-rank">1</span>
+                    <div class="topic-content">
+                        <h4>黄金价格预测</h4>
+                        <p>2.3k 阅读</p>
+                    </div>
+                </div>
+                <div class="topic-item" onclick="filterNews('美联储利率决议')">
+                    <span class="topic-rank">2</span>
+                    <div class="topic-content">
+                        <h4>美联储利率决议</h4>
+                        <p>1.8k 阅读</p>
+                    </div>
+                </div>
+                <div class="topic-item" onclick="filterNews('恒生指数走势')">
+                    <span class="topic-rank">3</span>
+                    <div class="topic-content">
+                        <h4>恒生指数走势</h4>
+                        <p>1.5k 阅读</p>
+                    </div>
+                </div>
+                <div class="topic-item" onclick="filterNews('避险资产配置')">
+                    <span class="topic-rank">4</span>
+                    <div class="topic-content">
+                        <h4>避险资产配置</h4>
+                        <p>1.2k 阅读</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 市场日历 -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">
+                    <i class="ph ph-calendar"></i>
+                    市场日历
+                </h3>
+                <div class="calendar-item">
+                    <div class="calendar-title">美国非农就业数据</div>
+                    <div class="calendar-time">
+                        <i class="ph ph-clock"></i>
+                        本周五 20:30
+                    </div>
+                </div>
+                <div class="calendar-item">
+                    <div class="calendar-title">欧洲央行利率决议</div>
+                    <div class="calendar-time">
+                        <i class="ph ph-clock"></i>
+                        下周四 21:15
+                    </div>
+                </div>
+                <div class="calendar-item">
+                    <div class="calendar-title">中国CPI数据</div>
+                    <div class="calendar-time">
+                        <i class="ph ph-clock"></i>
+                        下周二 09:30
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // ============================================
+        // 新闻数据
+        // ============================================
+        const allNewsData = [
+            {
+                id: 1,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '黄金价格突破5200美元关口，创近期新高',
+                excerpt: '受全球地缘政治紧张局势影响，避险资产需求增加，黄金价格持续走高。分析师认为短期仍有上涨空间...',
+                time: '2小时前',
+                views: '2,341',
+                color: '#ffd700'
+            },
+            {
+                id: 2,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美联储会议纪要：通胀回落仍需时间',
+                excerpt: '最新公布的会议纪要显示，多数委员认为通胀压力仍然存在，短期内降息可能性较低...',
+                time: '4小时前',
+                views: '1,892',
+                color: '#ffd700'
+            },
+            {
+                id: 3,
+                tag: '全球市场',
+                icon: 'ph-globe',
+                image: '../assets/images/v2/tech-globe-v2.jpg',
+                title: '亚洲股市普遍上涨，恒生指数突破26700点',
+                excerpt: '受益于积极的宏观经济数据，亚洲主要股市今日普遍收涨。香港恒生指数创下近三个月新高...',
+                time: '6小时前',
+                views: '1,567',
+                color: '#ffd700'
+            },
+            {
+                id: 4,
+                tag: '原油',
+                icon: 'ph-drop',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '国际油价震荡上行，WTI突破80美元',
+                excerpt: '供应紧张预期支撑油价，同时主要经济体需求回暖迹象明显。市场关注下周OPEC+会议...',
+                time: '8小时前',
+                views: '1,234',
+                color: '#ffd700'
+            },
+            {
+                id: 5,
+                tag: '加密货币',
+                icon: 'ph-currency-btc',
+                image: '../assets/images/v2/cybersecurity-dark.jpg',
+                title: '比特币ETF持续净流入，机构配置需求旺盛',
+                excerpt: '数据显示，上周主要比特币ETF产品合计净流入超过20亿美元，显示出机构投资者对数字资产的持续兴趣...',
+                time: '12小时前',
+                views: '2,156',
+                color: '#ffd700'
+            },
+            {
+                id: 6,
+                tag: '投资策略',
+                icon: 'ph-chart-pie-slice',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '2026年黄金投资策略：专家看好下半年表现',
+                excerpt: '多家投行发布研究报告，预计2026年下半年黄金价格有望突破5500美元大关。建议投资者关注地缘政治风险和美联储政策动向...',
+                time: '14小时前',
+                views: '3,421',
+                color: '#ffd700'
+            },
+            {
+                id: 7,
+                tag: '地缘政治',
+                icon: 'ph-globe-hemisphere-west',
+                image: '../assets/images/v2/tech-globe-v2.jpg',
+                title: '中东局势升温，避险资产需求激增',
+                excerpt: '地区冲突升级引发市场担忧，投资者纷纷转向黄金等避险资产。分析师称这可能是金价上涨的重要催化剂...',
+                time: '16小时前',
+                views: '2,876',
+                color: '#ffd700'
+            },
+            {
+                id: 8,
+                tag: '央行动态',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '全球央行持续增持黄金储备',
+                excerpt: '国际货币基金组织数据显示，2025年第四季度全球央行净购金量创历史新高。新兴市场国家成为主要买家...',
+                time: '18小时前',
+                views: '1,654',
+                color: '#ffd700'
+            },
+            {
+                id: 9,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '上海黄金交易所交易量创新高',
+                excerpt: '受国内市场旺盛需求推动，上金所本月黄金交易量突破历史记录。分析人士认为这反映了投资者对实物黄金的热情...',
+                time: '20小时前',
+                views: '1,234',
+                color: '#ffd700'
+            },
+            {
+                id: 10,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金技术面分析：关键支撑位在哪里？',
+                excerpt: '技术分析师指出，黄金当前处于上升通道中，5100美元是重要支撑位。若突破5250美元，有望开启新一轮上涨行情...',
+                time: '22小时前',
+                views: '2,098',
+                color: '#ffd700'
+            },
+            {
+                id: 11,
+                tag: '投资策略',
+                icon: 'ph-wallet',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '如何在投资组合中配置黄金？',
+                excerpt: '专家建议，黄金应占投资组合的5-15%。文章分析了实物黄金、黄金ETF和黄金期货等不同投资方式的优劣...',
+                time: '1天前',
+                views: '3,567',
+                color: '#ffd700'
+            },
+            {
+                id: 12,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美联储主席暗示年内或降息两次',
+                excerpt: '在最新的国会听证会上，美联储主席释放了鸽派信号。市场普遍预期年内将有两次降息，这利好黄金价格...',
+                time: '1天前',
+                views: '4,231',
+                color: '#ffd700'
+            },
+            {
+                id: 13,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '印度黄金进口量创五年新高',
+                excerpt: '随着婚礼季节的到来，印度黄金进口量大增。作为全球最大的黄金消费国之一，印度需求对全球金价具有重要影响...',
+                time: '1天前',
+                views: '1,876',
+                color: '#ffd700'
+            },
+            {
+                id: 14,
+                tag: '宏观经济',
+                icon: 'ph-chart-bar',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '全球债务水平创新高，黄金成避风港',
+                excerpt: '国际清算银行报告显示，全球债务总额已达到历史新高。在不确定性增加的背景下，黄金作为避险资产的吸引力增强...',
+                time: '2天前',
+                views: '2,543',
+                color: '#ffd700'
+            },
+            {
+                id: 15,
+                tag: '投资策略',
+                icon: 'ph-lightning',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '黄金vs比特币：哪种资产更适合避险？',
+                excerpt: '随着数字货币的发展，投资者开始对比黄金和比特币的避险属性。文章从多个维度分析两种资产的优劣...',
+                time: '2天前',
+                views: '3,876',
+                color: '#ffd700'
+            },
+            {
+                id: 16,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金价格技术分析：MACD金叉确认，上涨动能增强',
+                excerpt: '技术图表显示，黄金日线级别MACD已经形成金叉，这是中期看涨信号。结合成交量放大，突破前期高点的概率较高...',
+                time: '2天前',
+                views: '1,789',
+                color: '#ffd700'
+            },
+            {
+                id: 17,
+                tag: '全球经济',
+                icon: 'ph-globe',
+                image: '../assets/images/v2/tech-globe-v2.jpg',
+                title: '世界经济论坛：黄金仍是最佳避险资产',
+                excerpt: '最新发布的全球风险报告指出，在经济不确定性增加的背景下，黄金作为传统避险资产的地位依然稳固...',
+                time: '3天前',
+                views: '2,456',
+                color: '#ffd700'
+            },
+            {
+                id: 18,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美联储官员表态：3月降息可能性不大',
+                excerpt: '多位美联储官员近期发表鹰派言论，认为通胀尚未完全受控，短期内降息的可能性较低，这支撑了美元走强...',
+                time: '3天前',
+                views: '3,234',
+                color: '#ffd700'
+            },
+            {
+                id: 19,
+                tag: '地缘政治',
+                icon: 'ph-globe-hemisphere-west',
+                image: '../assets/images/v2/cybersecurity-dark.jpg',
+                title: '欧洲能源危机加剧，黄金需求上升',
+                excerpt: '受地缘政治影响，欧洲能源价格持续攀升，投资者担忧经济增长放缓，纷纷增持黄金以对冲风险...',
+                time: '3天前',
+                views: '1,876',
+                color: '#ffd700'
+            },
+            {
+                id: 20,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '中国春节黄金消费旺季，需求强劲',
+                excerpt: '春节期间，中国黄金珠宝销售火爆，多地金店出现抢购热潮。这反映出国内消费者对黄金保值增值功能的认可...',
+                time: '4天前',
+                views: '2,345',
+                color: '#ffd700'
+            },
+            {
+                id: 21,
+                tag: '投资策略',
+                icon: 'ph-chart-pie-slice',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '桥水基金达里奥：建议配置5-10%黄金',
+                excerpt: '知名投资人达里奥在接受采访时表示，在当前宏观环境下，投资者应在投资组合中配置5-10%的黄金...',
+                time: '4天前',
+                views: '4,567',
+                color: '#ffd700'
+            },
+            {
+                id: 22,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金突破长期下降趋势线，技术面转多',
+                excerpt: '分析师指出，黄金已突破自2024年以来的长期下降趋势线，技术形态明显转多，有望挑战历史高点...',
+                time: '4天前',
+                views: '1,923',
+                color: '#ffd700'
+            },
+            {
+                id: 23,
+                tag: '加密货币',
+                icon: 'ph-currency-btc',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '机构投资者增持黄金ETF，撤资比特币',
+                excerpt: '最新资金流向数据显示，机构投资者近期大量买入黄金ETF，同时减持比特币，反映出风险偏好发生变化...',
+                time: '5天前',
+                views: '2,654',
+                color: '#ffd700'
+            },
+            {
+                id: 24,
+                tag: '全球经济',
+                icon: 'ph-chart-bar',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '全球经济增速放缓担忧升温',
+                excerpt: '世界银行下调2026年全球经济增长预期，市场担忧情绪升温，避险资产受到青睐，黄金价格获得支撑...',
+                time: '5天前',
+                views: '1,876',
+                color: '#ffd700'
+            },
+            {
+                id: 25,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '黄金矿业公司财报：生产成本上升',
+                excerpt: '主要黄金矿业公司公布的财报显示，受能源和劳动力成本上升影响，黄金生产成本持续攀升...',
+                time: '5天前',
+                views: '1,432',
+                color: '#ffd700'
+            },
+            {
+                id: 26,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美联储资产负债表继续缩减',
+                excerpt: '美联储最新数据显示，其资产负债表规模继续收缩，量化紧缩政策仍在持续，市场流动性收紧...',
+                time: '6天前',
+                views: '1,234',
+                color: '#ffd700'
+            },
+            {
+                id: 27,
+                tag: '投资策略',
+                icon: 'ph-wallet',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '退休投资组合中黄金的配置比例探讨',
+                excerpt: '理财专家建议，退休人群应适当配置黄金以对冲通胀风险，但比例不宜过高，建议控制在5-15%之间...',
+                time: '6天前',
+                views: '2,098',
+                color: '#ffd700'
+            },
+            {
+                id: 28,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '金银比持续走高，白银或存补涨机会',
+                excerpt: '当前金银比处于历史较高水平，分析认为白银可能被低估，若黄金继续上涨，白银有望迎来补涨行情...',
+                time: '6天前',
+                views: '1,567',
+                color: '#ffd700'
+            },
+            {
+                id: 29,
+                tag: '地缘政治',
+                icon: 'ph-globe-hemisphere-west',
+                image: '../assets/images/v2/tech-globe-v2.jpg',
+                title: '红海局势紧张，航运成本上升',
+                excerpt: '红海地区局势持续紧张，多家航运公司改道绕行，全球供应链受到影响，通胀预期上升支撑金价...',
+                time: '1周前',
+                views: '2,345',
+                color: '#ffd700'
+            },
+            {
+                id: 30,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '土耳其央行大举买入黄金',
+                excerpt: '土耳其央行过去三个月累计购入黄金超过50吨，成为近期最大的黄金买家之一，反映了新兴市场国家的外汇储备多元化趋势...',
+                time: '1周前',
+                views: '1,789',
+                color: '#ffd700'
+            },
+            {
+                id: 31,
+                tag: '投资策略',
+                icon: 'ph-chart-pie-slice',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '量化对冲基金增加黄金期货持仓',
+                excerpt: '美国商品期货交易委员会数据显示，量化对冲基金近期大幅增持黄金期货多头头寸，投机性需求上升...',
+                time: '1周前',
+                views: '1,456',
+                color: '#ffd700'
+            },
+            {
+                id: 32,
+                tag: '全球经济',
+                icon: 'ph-chart-bar',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '日本经济意外萎缩，日元走弱',
+                excerpt: '日本第四季度GDP数据不及预期，经济陷入技术性衰退，日元对美元汇率创多年新低，推动美元计价的黄金上涨...',
+                time: '1周前',
+                views: '2,109',
+                color: '#ffd700'
+            },
+            {
+                id: 33,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金ETF持仓量连续三周增加',
+                excerpt: '全球主要黄金ETF持仓量连续第三周增长，显示机构投资者对黄金的乐观情绪正在回升...',
+                time: '1周前',
+                views: '1,876',
+                color: '#ffd700'
+            },
+            {
+                id: 34,
+                tag: '原油',
+                icon: 'ph-drop',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '油价反弹至三个月高点',
+                excerpt: '受供应紧张预期和需求回暖推动，国际油价攀升至三个月高位，通胀预期上升利好黄金...',
+                time: '1周前',
+                views: '1,543',
+                color: '#ffd700'
+            },
+            {
+                id: 35,
+                tag: '投资策略',
+                icon: 'ph-lightning',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '高盛上调黄金价格目标至5500美元',
+                excerpt: '高盛发布最新研报，将2026年底黄金价格目标从5000美元上调至5500美元，理由是地缘政治风险和央行购金需求...',
+                time: '1周前',
+                views: '5,432',
+                color: '#ffd700'
+            },
+            {
+                id: 36,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '瑞士黄金出口数据：亚洲需求旺盛',
+                excerpt: '瑞士海关数据显示，1月份黄金出口量大幅增加，主要流向中国和印度等亚洲市场，反映实物黄金需求强劲...',
+                time: '1周前',
+                views: '1,678',
+                color: '#ffd700'
+            },
+            {
+                id: 37,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美债收益率曲线倒挂收窄',
+                excerpt: '美债收益率曲线倒挂程度有所收窄，市场对经济软着陆的预期增强，但衰退风险仍未完全消除...',
+                time: '1周前',
+                views: '1,234',
+                color: '#ffd700'
+            },
+            {
+                id: 38,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金与美元指数负相关性增强',
+                excerpt: '近期黄金价格与美元指数的负相关性明显增强，美元走势成为影响金价的关键因素之一...',
+                time: '1周前',
+                views: '1,890',
+                color: '#ffd700'
+            },
+            {
+                id: 39,
+                tag: '投资策略',
+                icon: 'ph-wallet',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '女性投资者黄金消费趋势分析',
+                excerpt: '报告显示，女性投资者在黄金消费中的占比持续上升，首饰金和投资金条均受到女性消费者青睐...',
+                time: '1周前',
+                views: '1,567',
+                color: '#ffd700'
+            },
+            {
+                id: 40,
+                tag: '全球市场',
+                icon: 'ph-globe',
+                image: '../assets/images/v2/tech-globe-v2.jpg',
+                title: '欧洲股市创新高，风险偏好回升',
+                excerpt: '欧洲主要股指创下历史新高，市场风险偏好改善，但分析师提醒投资者警惕回调风险...',
+                time: '2周前',
+                views: '1,432',
+                color: '#ffd700'
+            },
+            {
+                id: 41,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '澳大利亚黄金产量下降',
+                excerpt: '澳大利亚矿业协会报告显示，受矿石品位下降影响，该国黄金产量连续三年下滑，供应端面临压力...',
+                time: '2周前',
+                views: '1,298',
+                color: '#ffd700'
+            },
+            {
+                id: 42,
+                tag: '投资策略',
+                icon: 'ph-chart-pie-slice',
+                image: '../assets/images/v2/blockchain-abstract.jpg',
+                title: '摩根士丹利：黄金仍具配置价值',
+                excerpt: '摩根士丹利财富管理建议客户继续配置黄金，认为在经济不确定性未消除前，黄金仍有上涨空间...',
+                time: '2周前',
+                views: '2,876',
+                color: '#ffd700'
+            },
+            {
+                id: 43,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金期货未平仓合约创新高',
+                excerpt: 'COMEX黄金期货未平仓合约数量创下历史新高，显示市场参与度显著提升，流动性充足...',
+                time: '2周前',
+                views: '1,654',
+                color: '#ffd700'
+            },
+            {
+                id: 44,
+                tag: '加密货币',
+                icon: 'ph-currency-btc',
+                image: '../assets/images/v2/cybersecurity-dark.jpg',
+                title: '比特币ETF管理费战打响',
+                excerpt: '多家发行商下调比特币ETF管理费以吸引投资者，费用战白热化，这可能影响投资者对比特币和黄金的选择...',
+                time: '2周前',
+                views: '2,109',
+                color: '#ffd700'
+            },
+            {
+                id: 45,
+                tag: '全球经济',
+                icon: 'ph-chart-bar',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '全球制造业PMI回升至荣枯线上方',
+                excerpt: '最新全球制造业PMI数据超出预期，升至50荣枯线以上，显示制造业活动开始扩张，经济前景改善...',
+                time: '2周前',
+                views: '1,432',
+                color: '#ffd700'
+            },
+            {
+                id: 46,
+                tag: '黄金市场',
+                icon: 'ph-coin',
+                image: '../assets/images/v2/gold-bars-v2.jpg',
+                title: '俄罗斯央行继续增持黄金',
+                excerpt: '尽管面临国际制裁，俄罗斯央行仍在增加黄金储备，以支持本币汇率和增强金融稳定性...',
+                time: '2周前',
+                views: '2,543',
+                color: '#ffd700'
+            },
+            {
+                id: 47,
+                tag: '投资策略',
+                icon: 'ph-lightning',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '如何辨别真假黄金？专家支招',
+                excerpt: '随着金价上涨，市场上出现假冒黄金产品。专家提醒消费者通过正规渠道购买，并介绍了几种简单的鉴别方法...',
+                time: '2周前',
+                views: '3,876',
+                color: '#ffd700'
+            },
+            {
+                id: 48,
+                tag: '技术分析',
+                icon: 'ph-trend-up',
+                image: '../assets/images/v2/business-chart.jpg',
+                title: '黄金季节性规律分析：春季是买入时机？',
+                excerpt: '历史数据显示，黄金价格在春季往往表现较好。分析师探讨了季节性因素对金价的影响...',
+                time: '2周前',
+                views: '2,234',
+                color: '#ffd700'
+            },
+            {
+                id: 49,
+                tag: '美联储',
+                icon: 'ph-bank',
+                image: '../assets/images/v2/data-center.jpg',
+                title: '美联储褐皮书：经济活动温和增长',
+                excerpt: '美联储最新褐皮书显示，多数地区经济活动保持温和增长，通胀压力有所缓解，就业市场趋于平衡...',
+                time: '2周前',
+                views: '1,567',
+                color: '#ffd700'
+            },
+            {
+                id: 50,
+                tag: '投资策略',
+                icon: 'ph-wallet',
+                image: '../assets/images/v2/golden-luxury.jpg',
+                title: '黄金定投策略：分散风险的有效方式',
+                excerpt: '对于普通投资者而言，定期定额投资黄金是一种简单有效的分散风险方式。本文分析了定投策略的优缺点...',
+                time: '2周前',
+                views: '2,109',
+                color: '#ffd700'
+            }
+        ];
+        
+        // ============================================
+        // 状态管理
+        // ============================================
+        const CONFIG = {
+            initialDisplay: 8,      // 初始显示8条
+            loadPerScroll: 6,       // 每次滚动加载6条
+            loadPerClick: 5,        // 点击加载5条
+            scrollThreshold: 200,   // 距离底部200px时触发加载
+            maxDisplay: 50          // 最多显示50条（防止性能问题）
+        };
+        
+        let displayedCount = CONFIG.initialDisplay;
+        let currentFilter = 'all';
+        let filteredNews = [...allNewsData];
+        let isLoading = false;
+        let scrollListenerAdded = false;
+        
+        // ============================================
+        // 无限滚动
+        // ============================================
+        function initInfiniteScroll() {
+            if (scrollListenerAdded) return;
+            
+            window.addEventListener('scroll', () => {
+                if (isLoading) return;
+                
+                const scrollHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.scrollY;
+                const clientHeight = window.innerHeight;
+                
+                // 距离底部200px时触发加载
+                if (scrollHeight - scrollTop - clientHeight < CONFIG.scrollThreshold) {
+                    if (displayedCount < filteredNews.length && displayedCount < CONFIG.maxDisplay) {
+                        isLoading = true;
+                        loadMoreNews(true); // true表示自动滚动加载
+                    }
+                }
+            });
+            
+            scrollListenerAdded = true;
+        }
+        
+        // 创建骨架屏卡片
+        function createSkeletonCard() {
+            const card = document.createElement('article');
+            card.className = 'news-card skeleton';
+            card.innerHTML = `
+                <div class="news-image">
+                    <div class="skeleton-img"></div>
+                </div>
+                <div class="news-content">
+                    <div class="skeleton-tag"></div>
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-title" style="width: 80%"></div>
+                    <div class="skeleton-excerpt"></div>
+                    <div class="skeleton-excerpt" style="width: 60%"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+            `;
+            return card;
+        }
+        
+        // ============================================
+        // 初始化
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            renderNews();
+            updateLoadMoreButton();
+            initNavbarScroll();
+            initInfiniteScroll();
+        });
+        
+        // 导航栏滚动效果
+        function initNavbarScroll() {
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar-v2');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+        
+        // ============================================
+        // 渲染新闻列表
+        // ============================================
+        function renderNews() {
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = '';
+            
+            const newsToShow = filteredNews.slice(0, displayedCount);
+            
+            newsToShow.forEach((news, index) => {
+                const card = createNewsCard(news, index);
+                newsGrid.appendChild(card);
+            });
+        }
+        
+        // ============================================
+        // 创建新闻卡片
+        // ============================================
+        function createNewsCard(news, index) {
+            const card = document.createElement('article');
+            card.className = 'news-card';
+            card.onclick = () => location.href = `news-detail.html?id=${news.id}`;
+            card.style.animationDelay = `${index * 0.05}s`;
+            
+            const imageHtml = news.image 
+                ? `<div class="news-image"><img src="${news.image}" alt="${news.title}" loading="lazy"><div class="news-image-overlay"></div></div>`
+                : `<div class="news-image"><div class="news-image-placeholder"><i class="ph-fill ${news.icon}"></i></div></div>`;
+            
+            card.innerHTML = `
+                ${imageHtml}
+                <div class="news-content">
+                    <span class="news-tag">${news.tag}</span>
+                    <h3 class="news-title">${news.title}</h3>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                    <div class="news-meta">
+                        <span><i class="ph ph-clock"></i> ${news.time}</span>
+                        <span><i class="ph ph-eye"></i> ${news.views} 阅读</span>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // ============================================
+        // 加载更多新闻
+        // ============================================
+        function loadMoreNews(isAutoLoad = false) {
+            const btn = document.getElementById('loadMoreBtn');
+            const btnText = btn.querySelector('span');
+            const btnIcon = btn.querySelector('i');
+            const newsGrid = document.getElementById('newsGrid');
+            
+            if (!isAutoLoad) {
+                // 手动点击时显示loading状态
+                btn.classList.add('loading');
+                btnIcon.className = 'ph ph-spinner';
+                btnText.textContent = '加载中...';
+                btn.disabled = true;
+            }
+            
+            // 自动加载时添加骨架屏
+            let skeletonCards = [];
+            if (isAutoLoad) {
+                for (let i = 0; i < 3; i++) {
+                    const skeleton = createSkeletonCard();
+                    newsGrid.appendChild(skeleton);
+                    skeletonCards.push(skeleton);
+                }
+            }
+            
+            // 模拟网络延迟
+            setTimeout(() => {
+                // 移除骨架屏
+                skeletonCards.forEach(s => s.remove());
+                
+                const currentLength = displayedCount;
+                const loadCount = isAutoLoad ? CONFIG.loadPerScroll : CONFIG.loadPerClick;
+                displayedCount = Math.min(displayedCount + loadCount, filteredNews.length, CONFIG.maxDisplay);
+                
+                const newNews = filteredNews.slice(currentLength, displayedCount);
+                
+                newNews.forEach((news, index) => {
+                    const card = createNewsCard(news, currentLength + index);
+                    card.classList.add('new-loaded');
+                    newsGrid.appendChild(card);
+                });
+                
+                if (!isAutoLoad) {
+                    // 恢复按钮状态
+                    btn.classList.remove('loading');
+                    btnIcon.className = 'ph ph-spinner-gap';
+                    btn.disabled = false;
+                }
+                
+                updateLoadMoreButton();
+                
+                // 自动加载不显示toast，避免打扰
+                if (!isAutoLoad && newNews.length > 0) {
+                    showToast(`已加载 ${newNews.length} 条新闻`);
+                }
+                
+                isLoading = false;
+            }, isAutoLoad ? 400 : 800);
+        }
+        
+        // ============================================
+        // 更新加载更多按钮状态
+        // ============================================
+        function updateLoadMoreButton() {
+            const btn = document.getElementById('loadMoreBtn');
+            const btnText = btn.querySelector('span');
+            const btnIcon = btn.querySelector('i');
+            const loadMoreContainer = document.querySelector('.load-more');
+            
+            // 移除已有的完成提示
+            const existingMessage = loadMoreContainer.querySelector('.completion-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            if (displayedCount >= filteredNews.length || displayedCount >= CONFIG.maxDisplay) {
+                btn.classList.add('completed');
+                btnIcon.className = 'ph ph-check-circle';
+                btnText.textContent = displayedCount >= CONFIG.maxDisplay ? '已加载全部内容' : '没有更多了';
+                btn.onclick = null;
+                btn.disabled = true;
+                
+                // 添加完成提示
+                showCompletionMessage();
+            } else {
+                btn.classList.remove('completed');
+                btnIcon.className = 'ph ph-spinner-gap';
+                btnText.textContent = '加载更多';
+                btn.onclick = () => loadMoreNews(false);
+                btn.disabled = false;
+            }
+        }
+        
+        // 显示完成提示
+        function showCompletionMessage() {
+            const loadMoreContainer = document.querySelector('.load-more');
+            const existingMessage = loadMoreContainer.querySelector('.completion-message');
+            if (existingMessage) return;
+            
+            const message = document.createElement('div');
+            message.className = 'completion-message';
+            message.innerHTML = `
+                <i class="ph ph-check-circle"></i>
+                <span>已加载全部 ${Math.min(displayedCount, filteredNews.length)} 条资讯</span>
+            `;
+            loadMoreContainer.appendChild(message);
+        }
+        
+        // ============================================
+        // 过滤新闻
+        // ============================================
+        function filterNews(category, btn) {
+            currentFilter = category;
+            
+            // 更新按钮状态
+            if (btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            
+            // 过滤数据
+            if (category === 'all') {
+                filteredNews = [...allNewsData];
+            } else {
+                filteredNews = allNewsData.filter(news => 
+                    news.tag.includes(category) || news.title.includes(category)
+                );
+            }
+            
+            // 重置显示数量
+            displayedCount = CONFIG.initialDisplay;
+            
+            // 重新渲染
+            renderNews();
+            updateLoadMoreButton();
+            
+            // 滚动到新闻区域
+            if (category !== 'all') {
+                document.querySelector('.news-column').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // ============================================
+        // Toast 提示
+        // ============================================
+        function showToast(message) {
+            // 检查是否已有toast
+            let toast = document.querySelector('.toast-message');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.className = 'toast-message';
+                document.body.appendChild(toast);
+            }
+            
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(100px)';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

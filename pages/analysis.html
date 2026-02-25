@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<!-- GoldPulse v2.0 Updated -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术分析 - GoldPulse v2.0</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- v2 CSS System -->
+    <link rel="stylesheet" href="../css/v2/variables.css">
+    <link rel="stylesheet" href="../css/v2/components.css">
+    <link rel="stylesheet" href="../css/v2/animations.css">
+    <link rel="stylesheet" href="../css/v2/utilities.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-text);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* ============================================
+           Navigation v2
+           ============================================ */
+        .navbar-v2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: var(--z-nav);
+            transition: all var(--duration-normal);
+        }
+        
+        .navbar-v2.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-container {
+            max-width: var(--container-xl);
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font: var(--text-h5);
+            color: var(--gold-primary);
+            text-decoration: none;
+            transition: opacity var(--duration-fast);
+        }
+        
+        .nav-logo:hover { opacity: 0.8; }
+        
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-gold-sm);
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .nav-link {
+            padding: var(--space-2) var(--space-4);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link.active {
+            color: var(--gold-primary);
+            background: var(--gold-10);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        /* ============================================
+           Risk Banner
+           ============================================ */
+        .risk-banner {
+            margin-top: var(--nav-height);
+            background: rgba(255,193,7,0.1);
+            border-bottom: 1px solid rgba(255,193,7,0.2);
+            padding: var(--space-3) var(--space-6);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+        }
+        
+        .risk-banner i {
+            color: #ffc107;
+            margin-right: var(--space-2);
+        }
+        
+        /* ============================================
+           Hero Dashboard v2 - 背景图 + 玻璃拟态
+           ============================================ */
+        .hero-dashboard {
+            padding: var(--space-16) var(--space-6);
+            position: relative;
+            overflow: hidden;
+            background: var(--gradient-bg-hero);
+        }
+        
+        .hero-dashboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/v2/data-center.jpg') center/cover no-repeat;
+            opacity: 0.2;
+            transform: scale(1.1);
+            animation: dashboardZoom 25s ease-in-out infinite alternate;
+        }
+        
+        .hero-dashboard::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(10,10,15,0.9) 100%);
+        }
+        
+        @keyframes dashboardZoom {
+            from { transform: scale(1.1); }
+            to { transform: scale(1.25); }
+        }
+        
+        .dashboard-container {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .market-tabs {
+            display: flex;
+            gap: var(--space-3);
+            margin-bottom: var(--space-10);
+        }
+        
+        .tab-btn {
+            padding: var(--space-3) var(--space-6);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .tab-btn.active {
+            background: var(--gold-10);
+            border-color: var(--gold-20);
+            color: var(--gold-primary);
+            box-shadow: var(--glow-gold-sm);
+            animation: tabPulse 0.5s ease;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        @keyframes tabPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .score-dashboard {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .score-value {
+            transition: all 0.5s ease;
+        }
+        
+        /* ============================================
+           Score Dashboard - 发光圆环
+           ============================================ */
+        .score-dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+            margin-bottom: var(--space-10);
+        }
+        
+        .score-card {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            text-align: center;
+            transition: all 0.4s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .score-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), transparent, rgba(255,215,0,0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .score-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,215,0,0.2);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        /* 圆形进度条 - 发光效果 */
+        .circular-score {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto var(--space-6);
+        }
+        
+        .circular-score svg {
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));
+        }
+        
+        .circular-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 8;
+        }
+        
+        .circular-progress {
+            fill: none;
+            stroke: url(#goldGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 83;
+            transition: stroke-dashoffset 1s ease;
+            filter: drop-shadow(0 0 6px rgba(255,215,0,0.5));
+        }
+        
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.3));
+        }
+        
+        .score-label {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .score-desc {
+            font-size: 0.875rem;
+            color: var(--text-quaternary);
+        }
+        
+        /* 多空力量条 - 流光效果 */
+        .force-bar {
+            margin-top: var(--space-5);
+        }
+        
+        .force-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-quaternary);
+            margin-bottom: var(--space-2);
+        }
+        
+        .force-track {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+        
+        .force-track::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .force-bull {
+            width: 78%;
+            background: linear-gradient(90deg, var(--up), #30d158);
+            border-radius: var(--radius-full) 0 0 var(--radius-full);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .force-bear {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ============================================
+           Content Section
+           ============================================ */
+        .content-section {
+            max-width: var(--container-xl);
+            margin: 0 auto;
+            padding: var(--space-16) var(--space-6);
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--space-10);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* ============================================
+           Indicators Section - 玻璃卡片
+           ============================================ */
+        .indicators-section {
+            position: relative;
+            padding: var(--space-16) var(--space-6);
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        
+        .indicators-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('../assets/images/v2/business-chart.jpg') center/cover no-repeat;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+            margin-bottom: var(--space-10);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .indicator-card {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            transition: all 0.3s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .indicator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 215, 0, 0.05),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--duration-normal);
+            pointer-events: none;
+        }
+        
+        .indicator-card:hover::before {
+            opacity: 1;
+        }
+        
+        .indicator-card:hover {
+            border-color: rgba(255,215,0,0.15);
+            background: rgba(255,255,255,0.04);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .indicator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .indicator-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .indicator-signal {
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .signal-bullish {
+            background: var(--up-10);
+            color: var(--up);
+            border: 1px solid rgba(50,215,75,0.2);
+        }
+        
+        .signal-neutral {
+            background: var(--gold-10);
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-20);
+        }
+        
+        .indicator-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+        
+        .indicator-desc {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+        
+        /* ============================================
+           Strategy Section - 配图卡片
+           ============================================ */
+        .strategy-section {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .strategy-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent, rgba(139,92,246,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .strategy-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-8);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .strategy-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-primary);
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(255,215,0,0.1);
+        }
+        
+        .strategy-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-6);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .strategy-card {
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            transition: all 0.4s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .strategy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            transition: all 0.4s;
+        }
+        
+        .strategy-card:nth-child(1)::before {
+            background-image: url('../assets/images/v2/conservative.jpg');
+        }
+        
+        .strategy-card:nth-child(2)::before {
+            background-image: url('../assets/images/v2/balanced.jpg');
+        }
+        
+        .strategy-card:nth-child(3)::before {
+            background-image: url('../assets/images/v2/aggressive.jpg');
+        }
+        
+        .strategy-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(180deg, transparent 0%, rgba(10,10,15,0.95) 100%);
+        }
+        
+        .strategy-card > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .strategy-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,215,0,0.2);
+            box-shadow: var(--shadow-card-hover);
+        }
+        
+        .strategy-card:hover::before {
+            opacity: 0.6;
+            transform: scale(1.05);
+        }
+        
+        .strategy-amount {
+            font-size: 0.875rem;
+            color: var(--gold-primary);
+            margin-bottom: var(--space-2);
+            font-weight: 500;
+        }
+        
+        .strategy-scenario {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            color: var(--text-primary);
+        }
+        
+        .strategy-advice {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: var(--space-4);
+        }
+        
+        .strategy-risk {
+            padding: var(--space-3);
+            background: var(--down-10);
+            border: 1px solid rgba(255,69,58,0.2);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            color: var(--down);
+        }
+        
+        /* ============================================
+           Data Source
+           ============================================ */
+        .data-source {
+            margin-top: var(--space-10);
+            padding: var(--space-6);
+            background: rgba(255,255,255,0.02);
+            border-radius: var(--radius-xl);
+            font-size: 0.875rem;
+            color: var(--text-quaternary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .data-source i {
+            color: var(--gold-primary);
+        }
+        
+        /* ============================================
+           Smart Analysis Section - 智能分析模块
+           ============================================ */
+        .smart-analysis {
+            position: relative;
+            padding: var(--space-16) var(--space-6);
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            margin-top: var(--space-16);
+        }
+        
+        .smart-analysis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+        }
+        
+        .smart-analysis .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--space-8);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .smart-analysis .section-title i {
+            font-size: 32px;
+        }
+        
+        .analysis-card-container {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analysis-card-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-2xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), transparent, rgba(139,92,246,0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .analysis-block {
+            padding: var(--space-6) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .analysis-block:last-child {
+            border-bottom: none;
+        }
+        
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-4);
+        }
+        
+        .analysis-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .analysis-icon.trend {
+            background: linear-gradient(135deg, rgba(50,215,75,0.15), rgba(50,215,75,0.05));
+            color: var(--up);
+        }
+        
+        .analysis-icon.suggestion {
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05));
+            color: var(--gold-primary);
+        }
+        
+        .analysis-icon.levels {
+            background: linear-gradient(135deg, rgba(10,132,255,0.15), rgba(10,132,255,0.05));
+            color: #0a84ff;
+        }
+        
+        .analysis-icon.risk {
+            background: linear-gradient(135deg, rgba(255,69,58,0.15), rgba(255,69,58,0.05));
+            color: var(--down);
+        }
+        
+        .analysis-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .analysis-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .suggestion-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .suggestion-badge[data-suggestion="buy"] {
+            background: rgba(50,215,75,0.1);
+            border: 1px solid rgba(50,215,75,0.3);
+            color: var(--up);
+        }
+        
+        .suggestion-badge[data-suggestion="hold"] {
+            background: rgba(255,193,7,0.1);
+            border: 1px solid rgba(255,193,7,0.3);
+            color: #ffc107;
+        }
+        
+        .suggestion-badge[data-suggestion="watch"] {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid var(--gold-20);
+            color: var(--gold-primary);
+        }
+        
+        .suggestion-badge[data-suggestion="sell"] {
+            background: rgba(255,69,58,0.1);
+            border: 1px solid rgba(255,69,58,0.3);
+            color: var(--down);
+        }
+        
+        .key-levels {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+        }
+        
+        .level-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+        
+        .level-label {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+        
+        .level-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+        
+        .level-tag {
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+        
+        .level-tag.support {
+            background: rgba(50,215,75,0.1);
+            border: 1px solid rgba(50,215,75,0.2);
+            color: var(--up);
+        }
+        
+        .level-tag.resistance {
+            background: rgba(255,69,58,0.1);
+            border: 1px solid rgba(255,69,58,0.2);
+            color: var(--down);
+        }
+        
+        .analysis-block.risk {
+            background: rgba(255,69,58,0.02);
+            margin: 0 calc(-1 * var(--space-8)) calc(-1 * var(--space-8));
+            padding: var(--space-6) var(--space-8);
+            border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+            border-bottom: none;
+        }
+        
+        .risk-alert {
+            display: flex;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: rgba(255,69,58,0.05);
+            border: 1px solid rgba(255,69,58,0.1);
+            border-radius: var(--radius-lg);
+        }
+        
+        .risk-alert i {
+            color: var(--down);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .risk-alert p {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .score-dashboard { grid-template-columns: 1fr; }
+            .indicators-grid { grid-template-columns: 1fr; }
+            .strategy-grid { grid-template-columns: 1fr; }
+            .market-tabs { flex-wrap: wrap; }
+            .key-levels { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 640px) {
+            .nav-menu { display: none; }
+            .risk-banner { font-size: 0.75rem; padding: var(--space-2) var(--space-4); }
+            .analysis-card-container { padding: var(--space-5); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar-v2">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <div class="nav-logo-icon"><i class="ph-fill ph-coin"></i></div>
+                <span>GoldPulse</span>
+            </a>
+            <div class="nav-menu">
+                <a href="../index.html" class="nav-link">首页</a>
+                <a href="markets.html" class="nav-link">行情</a>
+                <a href="analysis.html" class="nav-link active">分析</a>
+                <a href="news.html" class="nav-link">资讯</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-secondary" onclick="location.href='login.html'">登录</button>
+                <button class="btn btn-primary" onclick="location.href='login.html?action=register'">注册</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 风险提示 -->
+    <div class="risk-banner">
+        <i class="ph ph-warning-circle"></i>
+        风险提示：本页面所有技术指标和分析内容仅供参考，不构成投资建议。过往表现不代表未来收益。投资有风险，入市需谨慎。
+    </div>
+    
+    <!-- Hero仪表板 -->
+    <section class="hero-dashboard">
+        <div class="dashboard-container">
+            <div class="market-tabs">
+                <button class="tab-btn active" data-market="gold"><i class="ph-fill ph-coin"></i> 黄金</button>
+                <button class="tab-btn" data-market="hsi"><i class="ph ph-buildings"></i> 恒生指数</button>
+                <button class="tab-btn" data-market="nasdaq"><i class="ph ph-chart-line-up"></i> 纳斯达克</button>
+                <button class="tab-btn" data-market="sp500"><i class="ph ph-chart-bar"></i> 标普500</button>
+            </div>
+            
+            <div class="score-dashboard">
+                <!-- 综合评级 -->
+                <div class="score-card card-spotlight">
+                    <div class="circular-score">
+                        <svg width="140" height="140">
+                            <defs>
+                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ffd700"/>
+                                    <stop offset="100%" style="stop-color:#d4af37"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="circular-bg" cx="70" cy="70" r="60"/>
+                            <circle class="circular-progress" cx="70" cy="70" r="60"/>
+                        </svg>
+                        <div class="score-value">78</div>
+                    </div>
+                    <div class="score-label">技术面偏多</div>
+                    <div class="score-desc">基于8项技术指标综合评估</div>
+                </div>
+                
+                <!-- 趋势强度 -->
+                <div class="score-card card-spotlight">
+                    <div class="circular-score">
+                        <svg width="140" height="140">
+                            <circle class="circular-bg" cx="70" cy="70" r="60"/>
+                            <circle class="circular-progress" cx="70" cy="70" r="60" style="stroke-dashoffset: 94;"/>
+                        </svg>
+                        <div class="score-value">75</div>
+                    </div>
+                    <div class="score-label">趋势强度</div>
+                    <div class="score-desc">上升趋势明确</div>
+                    
+                    <div class="force-bar">
+                        <div class="force-labels">
+                            <span>多头 78%</span>
+                            <span>空头 22%</span>
+                        </div>
+                        <div class="force-track">
+                            <div class="force-bull"></div>
+                            <div class="force-bear"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 关键价位 -->
+                <div class="score-card card-spotlight">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--gold-primary); margin-bottom: var(--space-4); filter: drop-shadow(0 0 20px rgba(255,215,0,0.3));">
+                        $5,100 / $5,250
+                    </div>
+                    <div class="score-label">支撑 / 阻力</div>
+                    <div class="score-desc">关键价位区间</div>
+                    <div style="margin-top: var(--space-6); padding: var(--space-4); background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg);">
+                        <div style="font-size: 0.75rem; color: var(--text-quaternary); margin-bottom: var(--space-2);">当前价格</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">$5,177.31</div>
+                        <div style="font-size: 0.875rem; color: var(--up); margin-top: 4px;">距阻力位 +1.4%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 智能分析区域 -->
+    <section class="smart-analysis">
+        <div class="dashboard-container">
+            <h2 class="section-title">
+                <i class="ph ph-brain"></i>
+                AI智能分析
+            </h2>
+            
+            <div class="analysis-card-container">
+                <!-- 趋势解读 -->
+                <div class="analysis-block">
+                    <div class="analysis-header">
+                        <div class="analysis-icon trend">
+                            <i class="ph ph-chart-line-up"></i>
+                        </div>
+                        <h3>趋势解读</h3>
+                    </div>
+                    <p class="analysis-text" id="trendText">
+                        黄金价格当前处于上升通道中，技术指标显示偏多格局。RSI维持在62.5的合理区间，未出现超买信号，表明仍有上涨空间。
+                    </p>
+                </div>
+                
+                <!-- 操作建议 -->
+                <div class="analysis-block">
+                    <div class="analysis-header">
+                        <div class="analysis-icon suggestion">
+                            <i class="ph ph-target"></i>
+                        </div>
+                        <h3>操作建议</h3>
+                    </div>
+                    <div class="suggestion-badge" id="suggestionBadge" data-suggestion="buy">
+                        <i class="ph ph-trend-up"></i>
+                        <span>建议逢低买入</span>
+                    </div>
+                </div>
+                
+                <!-- 关键价位 -->
+                <div class="analysis-block">
+                    <div class="analysis-header">
+                        <div class="analysis-icon levels">
+                            <i class="ph ph-currency-dollar"></i>
+                        </div>
+                        <h3>关键价位</h3>
+                    </div>
+                    <div class="key-levels">
+                        <div class="level-group">
+                            <span class="level-label">支撑位</span>
+                            <div class="level-tags" id="supportLevels">
+                                <span class="level-tag support">5100美元</span>
+                                <span class="level-tag support">5050美元</span>
+                                <span class="level-tag support">5000美元</span>
+                            </div>
+                        </div>
+                        <div class="level-group">
+                            <span class="level-label">阻力位</span>
+                            <div class="level-tags" id="resistanceLevels">
+                                <span class="level-tag resistance">5250美元</span>
+                                <span class="level-tag resistance">5300美元</span>
+                                <span class="level-tag resistance">5350美元</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 风险提示 -->
+                <div class="analysis-block risk">
+                    <div class="analysis-header">
+                        <div class="analysis-icon risk">
+                            <i class="ph ph-warning"></i>
+                        </div>
+                        <h3>风险提示</h3>
+                    </div>
+                    <div class="risk-alert" id="riskAlert">
+                        <i class="ph ph-warning-circle"></i>
+                        <p>若跌破5100美元支撑位，可能进一步回调至5050美元。建议设置止损位于5080美元下方。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 技术指标 -->
+    <section class="content-section indicators-section">
+        <h2 class="section-title">技术指标</h2>
+        
+        <div class="indicators-grid">
+            <div class="indicator-card card-spotlight">
+                <div class="indicator-header">
+                    <span class="indicator-name">RSI (14)</span>
+                    <span class="indicator-signal signal-neutral">中性</span>
+                </div>
+                <div class="indicator-value">62.5</div>
+                <div class="indicator-desc">未超买超卖，仍有上涨空间</div>
+            </div>
+            
+            <div class="indicator-card card-spotlight">
+                <div class="indicator-header">
+                    <span class="indicator-name">MACD</span>
+                    <span class="indicator-signal signal-bullish">偏多</span>
+                </div>
+                <div class="indicator-value">+12.3</div>
+                <div class="indicator-desc">金叉形成，动能增强</div>
+            </div>
+            
+            <div class="indicator-card card-spotlight">
+                <div class="indicator-header">
+                    <span class="indicator-name">移动平均线 (MA20)</span>
+                    <span class="indicator-signal signal-bullish">偏多</span>
+                </div>
+                <div class="indicator-value">$5,180</div>
+                <div class="indicator-desc">价格在均线上方，多头排列</div>
+            </div>
+            
+            <div class="indicator-card card-spotlight">
+                <div class="indicator-header">
+                    <span class="indicator-name">布林带</span>
+                    <span class="indicator-signal signal-neutral">中性</span>
+                </div>
+                <div class="indicator-value">中上轨</div>
+                <div class="indicator-desc">通道向上，处于强势区域</div>
+            </div>
+        </div>
+        
+        <!-- 投资策略场景 -->
+        <div class="strategy-section">
+            <div class="strategy-header">
+                <div class="strategy-icon"><i class="ph ph-strategy"></i></div>
+                <h3 class="strategy-title">投资策略参考</h3>
+            </div>
+            
+            <div class="strategy-grid">
+                <div class="strategy-card card-spotlight">
+                    <div class="strategy-amount">10万元以下</div>
+                    <div class="strategy-scenario">保守型配置</div>
+                    <div class="strategy-advice">
+                        建议分批建仓，若回调至$5,100-5,150区间可考虑买入。
+                        单次建仓不超过总资金的30%。
+                    </div>
+                    <div class="strategy-risk">
+                        <i class="ph ph-warning"></i> 风险提示：设置止损在$5,050下方
+                    </div>
+                </div>
+                
+                <div class="strategy-card card-spotlight">
+                    <div class="strategy-amount">10-50万元</div>
+                    <div class="strategy-scenario">平衡型配置</div>
+                    <div class="strategy-advice">
+                        可采用金字塔式建仓，当前可建仓40%，回调加仓。
+                        建议配置比例：黄金60%，现金40%。
+                    </div>
+                    <div class="strategy-risk">
+                        <i class="ph ph-warning"></i> 风险提示：仓位控制在50%以内
+                    </div>
+                </div>
+                
+                <div class="strategy-card card-spotlight">
+                    <div class="strategy-amount">50万元以上</div>
+                    <div class="strategy-scenario">进取型配置</div>
+                    <div class="strategy-advice">
+                        可积极把握波段机会，突破$5,250可考虑加仓。
+                        建议分散配置多个相关品种。
+                    </div>
+                    <div class="strategy-risk">
+                        <i class="ph ph-warning"></i> 风险提示：严格止损，控制回撤
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 数据来源 -->
+        <div class="data-source">
+            <i class="ph ph-info"></i>
+            <span>数据来源：高盛、摩根士丹利、瑞银等主流投行研报 | 历史预测准确率仅供参考，不构成未来收益保证</span>
+        </div>
+    </section>
+
+    <script>
+        // ============================================
+        // 市场分析数据
+        // ============================================
+        const marketAnalysisData = {
+            gold: {
+                id: 'gold',
+                name: '黄金',
+                symbol: 'XAU/USD',
+                icon: 'ph-coin',
+                price: '$5,177.31',
+                change: '+0.37%',
+                isUp: true,
+                techScore: 78,
+                trendStrength: 75,
+                bullForce: 78,
+                bearForce: 22,
+                support: '$5,100',
+                resistance: '$5,250',
+                distanceToResistance: '+1.4%',
+                indicators: {
+                    rsi: { value: 62.5, signal: 'neutral', desc: '未超买超卖，仍有上涨空间' },
+                    macd: { value: '+12.3', signal: 'bullish', desc: '金叉形成，动能增强' },
+                    ma20: { value: '$5,180', signal: 'bullish', desc: '价格在均线上方，多头排列' },
+                    bollinger: { value: '中上轨', signal: 'neutral', desc: '通道向上，处于强势区域' }
+                },
+                analysis: {
+                    trend: '黄金价格当前处于上升通道中，技术指标显示偏多格局。RSI维持在62.5的合理区间，未出现超买信号，表明仍有上涨空间。',
+                    suggestion: 'buy',
+                    suggestionText: '建议逢低买入',
+                    keyLevels: {
+                        support: ['5100美元', '5050美元', '5000美元'],
+                        resistance: ['5250美元', '5300美元', '5350美元']
+                    },
+                    riskWarning: '若跌破5100美元支撑位，可能进一步回调至5050美元。建议设置止损位于5080美元下方。'
+                }
+            },
+            hsi: {
+                id: 'hsi',
+                name: '恒生指数',
+                symbol: 'HSI',
+                icon: 'ph-buildings',
+                price: '26,738.88',
+                change: '+0.56%',
+                isUp: true,
+                techScore: 65,
+                trendStrength: 70,
+                bullForce: 65,
+                bearForce: 35,
+                support: '26,200',
+                resistance: '27,000',
+                distanceToResistance: '+1.0%',
+                indicators: {
+                    rsi: { value: 58.3, signal: 'neutral', desc: '中性偏强，动能平稳' },
+                    macd: { value: '+85.6', signal: 'bullish', desc: '金叉延续，动能温和' },
+                    ma20: { value: '26,450', signal: 'bullish', desc: '价格站稳均线上方' },
+                    bollinger: { value: '中轨附近', signal: 'neutral', desc: '通道收窄，等待突破' }
+                },
+                analysis: {
+                    trend: '恒生指数近期表现稳健，受到科技股带动整体走高。技术指标显示中性偏多，但上涨动能相对温和。MACD维持金叉状态，但斜率有所放缓。',
+                    suggestion: 'hold',
+                    suggestionText: '建议持有观望',
+                    keyLevels: {
+                        support: ['26200点', '25800点', '25500点'],
+                        resistance: ['27000点', '27500点', '28000点']
+                    },
+                    riskWarning: '若未能突破27000点阻力位，可能回落至26200点支撑。关注科技股业绩表现。'
+                }
+            },
+            nasdaq: {
+                id: 'nasdaq',
+                name: '纳斯达克',
+                symbol: 'NASDAQ',
+                icon: 'ph-chart-line-up',
+                price: '22,863.68',
+                change: '+1.04%',
+                isUp: true,
+                techScore: 82,
+                trendStrength: 85,
+                bullForce: 82,
+                bearForce: 18,
+                support: '22,500',
+                resistance: '23,200',
+                distanceToResistance: '+1.5%',
+                indicators: {
+                    rsi: { value: 68.2, signal: 'bullish', desc: '强势区域，动能充沛' },
+                    macd: { value: '+156.8', signal: 'bullish', desc: '金叉强劲，多头主导' },
+                    ma20: { value: '22,340', signal: 'bullish', desc: '多头排列，趋势健康' },
+                    bollinger: { value: '上轨附近', signal: 'bullish', desc: '通道扩张，强势运行' }
+                },
+                analysis: {
+                    trend: '纳斯达克指数表现强劲，科技股领涨大盘。多项技术指标显示强势，RSI接近超买但未过热。AI板块持续受到资金追捧，带动整体市场情绪。',
+                    suggestion: 'buy',
+                    suggestionText: '积极关注买入机会',
+                    keyLevels: {
+                        support: ['22500点', '22000点', '21500点'],
+                        resistance: ['23200点', '23500点', '24000点']
+                    },
+                    riskWarning: 'RSI接近超买区域，短期或有回调风险。建议分批建仓，避免追高。关注美联储政策动向。'
+                }
+            },
+            sp500: {
+                id: 'sp500',
+                name: '标普500',
+                symbol: 'S&P500',
+                icon: 'ph-chart-bar',
+                price: '5,892.35',
+                change: '+0.78%',
+                isUp: true,
+                techScore: 80,
+                trendStrength: 78,
+                bullForce: 80,
+                bearForce: 20,
+                support: '5,800',
+                resistance: '5,950',
+                distanceToResistance: '+1.0%',
+                indicators: {
+                    rsi: { value: 65.8, signal: 'bullish', desc: '偏强区域，动能良好' },
+                    macd: { value: '+42.5', signal: 'bullish', desc: '金叉稳定，趋势向上' },
+                    ma20: { value: '5,820', signal: 'bullish', desc: '均线多头排列' },
+                    bollinger: { value: '中上轨', signal: 'neutral', desc: '通道向上，运行稳健' }
+                },
+                analysis: {
+                    trend: '标普500指数延续上涨趋势，权重股表现分化但整体向好。技术指标显示健康偏多状态，估值水平处于历史合理区间上沿。',
+                    suggestion: 'hold',
+                    suggestionText: '建议稳健持有',
+                    keyLevels: {
+                        support: ['5800点', '5750点', '5700点'],
+                        resistance: ['5950点', '6000点', '6050点']
+                    },
+                    riskWarning: '估值偏高可能限制上涨空间。若跌破5800点支撑，需警惕进一步调整风险。'
+                }
+            }
+        };
+        
+        // 当前选中的市场
+        let currentMarket = 'gold';
+        
+        // ============================================
+        // 初始化光晕追踪效果
+        // ============================================
+        function initSpotlightEffect() {
+            const cards = document.querySelectorAll('.card-spotlight');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        }
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar-v2');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // 圆环动画进入
+        function animateCircles() {
+            const circles = document.querySelectorAll('.circular-progress');
+            circles.forEach((circle, index) => {
+                const offset = circle.style.strokeDashoffset || '83';
+                circle.style.strokeDashoffset = '377';
+                setTimeout(() => {
+                    circle.style.strokeDashoffset = offset;
+                }, index * 200 + 500);
+            });
+        }
+        
+        // ============================================
+        // 市场切换功能
+        // ============================================
+        function initMarketTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const marketId = tab.dataset.market;
+                    switchMarket(marketId);
+                });
+            });
+        }
+        
+        function switchMarket(marketId) {
+            if (marketId === currentMarket) return;
+            
+            const data = marketAnalysisData[marketId];
+            if (!data) return;
+            
+            // 更新Tab状态
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.market === marketId);
+            });
+            
+            // 添加切换动画
+            const dashboard = document.querySelector('.score-dashboard');
+            dashboard.style.opacity = '0';
+            dashboard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                // 更新仪表板数据
+                updateDashboard(data);
+                // 更新技术指标
+                updateIndicators(data.indicators);
+                // 更新智能分析
+                updateAnalysis(data.analysis);
+                
+                // 显示动画
+                dashboard.style.transition = 'all 0.5s ease';
+                dashboard.style.opacity = '1';
+                dashboard.style.transform = 'translateY(0)';
+            }, 300);
+            
+            currentMarket = marketId;
+        }
+        
+        // 更新仪表板
+        function updateDashboard(data) {
+            const scoreCards = document.querySelectorAll('.score-card');
+            
+            // 更新综合评分
+            const scoreValue = scoreCards[0].querySelector('.score-value');
+            const scoreProgress = scoreCards[0].querySelector('.circular-progress');
+            scoreValue.textContent = data.techScore;
+            scoreProgress.style.strokeDashoffset = 377 - (377 * data.techScore / 100);
+            
+            // 更新趋势强度
+            const trendValue = scoreCards[1].querySelector('.score-value');
+            const trendProgress = scoreCards[1].querySelector('.circular-progress');
+            trendValue.textContent = data.trendStrength;
+            trendProgress.style.strokeDashoffset = 377 - (377 * data.trendStrength / 100);
+            
+            // 更新多空力量条
+            const forceBull = document.querySelector('.force-bull');
+            const forceLabels = document.querySelectorAll('.force-labels span');
+            forceBull.style.width = data.bullForce + '%';
+            forceLabels[0].textContent = `多头 ${data.bullForce}%`;
+            forceLabels[1].textContent = `空头 ${data.bearForce}%`;
+            
+            // 更新关键价位
+            const keyLevelValue = scoreCards[2].querySelector('div:first-child');
+            keyLevelValue.textContent = `${data.support} / ${data.resistance}`;
+            
+            // 更新当前价格
+            const currentPriceEl = scoreCards[2].querySelector('div[style*="当前价格"] + div');
+            if (currentPriceEl) {
+                currentPriceEl.textContent = data.price;
+            }
+        }
+        
+        // 更新技术指标卡片
+        function updateIndicators(indicators) {
+            const indicatorCards = document.querySelectorAll('.indicator-card');
+            const indicatorKeys = ['rsi', 'macd', 'ma20', 'bollinger'];
+            const signalMap = {
+                bullish: '偏多',
+                neutral: '中性',
+                bearish: '偏空'
+            };
+            
+            indicatorCards.forEach((card, index) => {
+                const key = indicatorKeys[index];
+                const indData = indicators[key];
+                
+                card.querySelector('.indicator-value').textContent = indData.value;
+                card.querySelector('.indicator-desc').textContent = indData.desc;
+                
+                // 更新信号标签
+                const signalEl = card.querySelector('.indicator-signal');
+                signalEl.className = `indicator-signal signal-${indData.signal}`;
+                signalEl.textContent = signalMap[indData.signal] || '中性';
+            });
+        }
+        
+        // 更新智能分析内容
+        function updateAnalysis(analysis) {
+            // 更新趋势解读
+            document.getElementById('trendText').textContent = analysis.trend;
+            
+            // 更新操作建议
+            const suggestionBadge = document.getElementById('suggestionBadge');
+            suggestionBadge.dataset.suggestion = analysis.suggestion;
+            suggestionBadge.querySelector('span').textContent = analysis.suggestionText;
+            
+            // 更新图标
+            const iconMap = {
+                buy: 'ph-trend-up',
+                hold: 'ph-pause',
+                watch: 'ph-eye',
+                sell: 'ph-trend-down'
+            };
+            suggestionBadge.querySelector('i').className = `ph ${iconMap[analysis.suggestion]}`;
+            
+            // 更新支撑位
+            const supportContainer = document.getElementById('supportLevels');
+            supportContainer.innerHTML = analysis.keyLevels.support
+                .map(level => `<span class="level-tag support">${level}</span>`)
+                .join('');
+            
+            // 更新阻力位
+            const resistanceContainer = document.getElementById('resistanceLevels');
+            resistanceContainer.innerHTML = analysis.keyLevels.resistance
+                .map(level => `<span class="level-tag resistance">${level}</span>`)
+                .join('');
+            
+            // 更新风险提示
+            document.querySelector('#riskAlert p').textContent = analysis.riskWarning;
+        }
+        
+        // 页面加载后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            initSpotlightEffect();
+            animateCircles();
+            initMarketTabs();
+        });
+    </script>
+</body>
+</html>
